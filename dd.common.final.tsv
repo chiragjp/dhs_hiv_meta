@@ -1,0 +1,543 @@
+Variable	Variable Description	kc	cjp	jc	ebd	echow	category
+v001	cluster number	sampleCollection	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	id	sampleCharacteristics
+v002	household number	id	id	id	sampleCharacteristics	id	id
+v003	line number	id	id	id	sampleCharacteristics	id	id
+hhid	household id	id	id	id	id	id	id
+v000	country code and phase	sampleCollection	location	sampleCollection	sampleCharacteristics	id	sampleCollection
+hv003	respondent's line number (answering household questionnaire)	id	id	id	sampleCharacteristics	id	id
+hv004	ultimate area unit	sampleCollection	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCollection	sampleCharacteristics
+hv005	household sample weight (6 decimals)	sampleCollection	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics
+hv006	month of interview	sampleCollection	samplecollection	samplecollection	sampleCharacteristics	sampleCollection	samplecollection
+hv007	year of interview	sampleCollection	sampleCollection	sampleCollection	sampleCharacteristics	sampleCollection	sampleCollection
+hv008	date of interview (cmc)	sampleCollection	sampleCollection	sampleCollection	sampleCharacteristics	sampleCollection	sampleCollection
+hv009	number of household members	social	social	social	social	social	social
+hv010	number of eligible women in household	social	social	social	social	social	social
+hv011	number of eligible men in household	social	social	social	social	social	social
+hv012	number of de jure members	social	social	social	social	social	social
+hv013	number of de facto members	social	social	social	social	social	social
+hv014	number of children 5 and under (de jure)	social	biological	social	social	social	social
+hv015	result of household interview	sampleCharacteristics	sampleCollection	sampleCollection	sampleCollection	sampleCollection	sampleCollection
+hv016	day of interview	sampleCharacteristics	sampleCollection	sampleCollection	sampleCharacteristics	sampleCollection	sampleCollection
+hv017	number of visits	sampleCharacteristics	sampleCollection	sampleCollection	sampleCharacteristics	sampleCollection	sampleCollection
+hv018	interviewer identification	id	id	id	id	sampleCollection	id
+hv019	na - keyer identification	id	id	id	id	sampleCollection	id
+hv020	ever-married sample	social	social	social	sampleCollection	social	social
+hv021	primary sampling unit	sampleCollection	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCollection	sampleCharacteristics
+hv022	sample strata for sampling errors	sampleCollection	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics
+hv023	stratification used in sample design	sampleCollection	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics
+hv024	region	location	location	location	location	location	location
+hv025	type of place of residence	location	location	location	location	economic	location
+hv026	na - place of residence	location	location	location	location	economic	location
+hv027	household selected for male interview	sampleCollection	sampleCollection	sampleCollection	sampleCollection	sampleCharacteristics	sampleCollection
+hv028	household weight for male subsample (6 decimals)	sampleCollection	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics
+hv030	field supervisor	id	id	id	id	sampleCharacteristics	id
+hv032	na - office editor	id	id	id	id	sampleCharacteristics	id
+hv201	source of drinking water	economic	economic	economic	economic	economic	economic
+hv205	type of toilet facility	economic	economic	economic	economic	economic	economic
+hv206	has electricity	economic	economic	economic	economic	economic	economic
+hv207	has radio	economic	economic	economic	economic	economic	economic
+hv208	has television	economic	economic	economic	economic	economic	economic
+hv209	has refrigerator	economic	economic	economic	economic	economic	economic
+hv210	has bicycle	economic	economic	economic	economic	economic	economic
+hv211	has motorcycle/scooter	economic	economic	economic	economic	economic	economic
+hv212	has car/truck	economic	economic	economic	economic	economic	economic
+hv213	main floor material	economic	economic	economic	economic	economic	economic
+hv217	relationship structure	social	social	social	social	social	social
+hv218	line number of head of household	id	id	id	sampleCharacteristics	sampleCollection	id
+hv219	sex of head of household	biological	social	social	social	biological	social
+hv220	age of head of household	biological	social	social	social	biological	social
+hv221	has telephone (land-line)	economic	economic	economic	economic	economic	economic
+hv227	has mosquito bed net for sleeping	economic	economic	economic	economic	behavior	economic
+hv228	children under 5 slept under mosquito bed net last night	economic	economic	economic	behavior	behavior	economic
+hv270	wealth index combined	economic	economic	economic	economic	economic	economic
+hv271	wealth index factor score combined (5 decimals)	economic	economic	economic	economic	economic	economic
+hv101	relationship to head	social	social	social	social	social	social
+hv102	usual resident	location	location	location	social	social	location
+hv103	slept last night	behavior	behavior	behavior	social	behavior	behavior
+hv104	sex of household member	biological	biological	social	social	biological	biological
+hv105	age of household members	biological	biological	social	social	biological	biological
+hv106	highest educational level attained	social	social	social	social	economic	social
+hv107	highest year of education completed	social	social	social	social	economic	social
+hv108	education completed in single years	social	social	social	social	economic	social
+hv109	educational attainment	social	social	social	social	economic	social
+hv110	na - member still in school	social	economic	economic	social	economic	economic
+hv111	mother alive	other	other	other	social	social	other
+hv112	mother's line number	id	id	id	sampleCharacteristics	sampleCollection	id
+hv113	father alive	other	other	other	social	social	other
+hv114	father's line number	id	id	id	sampleCharacteristics	sampleCollection	id
+hv117	eligibility for female interview	other	social	social	sampleCollection	sampleCollection	sampleCollection
+hv118	eligibility for male interview	other	social	social	sampleCollection	sampleCollection	sampleCollection
+hv120	children eligibility for height/weight and hemoglobin	social	social	social	sampleCollection	sampleCollection	social
+caseid	NA	id	id	id	id	id	id
+v004	ultimate area unit	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCollection	sampleCharacteristics
+v005	women's individual sample weight (6 decimals)	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCollection	sampleCharacteristics
+v006	month of interview	sampleCollection	sampleCollection	sampleCollection	sampleCharacteristics	sampleCollection	sampleCollection
+v007	year of interview	sampleCollection	sampleCollection	sampleCollection	sampleCharacteristics	sampleCollection	sampleCollection
+v008	date of interview (cmc)	sampleCollection	sampleCollection	sampleCollection	sampleCharacteristics	sampleCollection	sampleCollection
+v009	respondent's month of birth	biological	biological	biological	social	biological	biological
+v010	respondent's year of birth	biological	biological	biological	social	biological	biological
+v011	date of birth (cmc)	biological	biological	biological	social	biological	biological
+v012	respondent's current age	biological	biological	biological	social	biological	biological
+v013	age in 5-year groups	biological	biological	biological	social	biological	biological
+v014	completeness of age information	sampleCollection	sampleCollection	sampleCollection	sampleCollection	sampleCollection	sampleCollection
+v015	result of individual interview	sampleCollection	sampleCharacteristics	sampleCharacteristics	sampleCollection	sampleCollection	sampleCollection
+v016	day of interview	sampleCollection	sampleCollection	sampleCollection	sampleCharacteristics	sampleCollection	sampleCollection
+v020	ever-married sample	sampleCharacteristics	social	social	sampleCollection	sampleCollection	sampleCollection
+v021	primary sampling unit	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCollection	sampleCollection	sampleCharacteristics
+v022	sample strata for sampling errors	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCollection	sampleCollection	sampleCharacteristics
+v023	stratification used in sample design	sampleCollection	sampleCharacteristics	sampleCharacteristics	sampleCollection	sampleCollection	sampleCollection
+v024	region	location	location	location	location	location	location
+v025	type of place of residence	location	location	location	location	economic	location
+v026	na - de facto place of residence	location	location	location	location	economic	location
+v027	number of visits	sampleCollection	sampleCollection	sampleCollection	sampleCharacteristics	sampleCollection	sampleCollection
+v028	interviewer identification	id	id	id	id	sampleCollection	id
+v029	na - keyer identification	id	id	id	id	sampleCollection	id
+v030	field supervisor	id	id	id	id	sampleCollection	id
+v032	na - office editor	id	id	id	id	sampleCollection	id
+v101	region	location	location	location	location	location	location
+v102	type of place of residence	location	location	location	location	economic	location
+v104	years lived in place of residence	other	other	other	social	economic	other
+v106	highest educational level	social	social	social	social	economic	social
+v107	highest year of education	social	social	social	social	economic	social
+v113	source of drinking water	economic	economic	economic	economic	economic	economic
+v116	type of toilet facility	economic	economic	economic	economic	economic	economic
+v119	household has: electricity	economic	economic	economic	economic	economic	economic
+v120	household has: radio	economic	economic	economic	economic	economic	economic
+v121	household has: television	economic	economic	economic	economic	economic	economic
+v122	household has: refrigerator	economic	economic	economic	economic	economic	economic
+v123	household has: bicycle	economic	economic	economic	economic	economic	economic
+v124	household has: motorcycle/scooter	economic	economic	economic	economic	economic	economic
+v125	household has: car/truck	economic	economic	economic	economic	economic	economic
+v127	main floor material	economic	economic	economic	economic	economic	economic
+v130	religion	behavior	behavior	behavior	social	social	behavior
+v131	na - ethnicity	biological	biological	biological	social	social	biological
+v133	education in single years	social	social	social	social	economic	social
+v134	na - de facto place of residence	social	location	location	location	economic	location
+v135	usual resident or visitor	location	location	location	social	social	location
+v136	number of household members (listed)	social	social	social	social	social	social
+v137	number of children 5 and under in household (de jure)	social	social	social	social	social	social
+v138	number of eligible women in household (de facto)	social	social	social	social	social	social
+v139	de jure region of residence	location	location	location	social	location	location
+v140	de jure type of place of residence	location	location	location	social	economic	location
+v141	na - de jure place of residence	location	location	location	social	economic	location
+v149	educational attainment	social	social	social	social	economic	social
+v150	relationship to household head	social	social	social	social	social	social
+v151	sex of household head	biological	social	social	social	biological	social
+v152	age of household head	biological	social	social	social	biological	social
+v153	household has: telephone (land-line)	social	economic	economic	economic	economic	economic
+v157	frequency of reading newspaper or magazine	behavior	behavior	behavior	behavior	behavior	behavior
+v158	frequency of listening to radio	behavior	behavior	behavior	behavior	behavior	behavior
+v159	frequency of watching television	behavior	behavior	behavior	behavior	behavior	behavior
+v190	wealth index combined	economic	economic	economic	economic	economic	economic
+v191	wealth index factor score combined (5 decimals)	economic	economic	economic	economic	economic	economic
+v201	total children ever born	behavior	behavior	behavior	social	social	behavior
+v213	currently pregnant	biological	biological	biological	biological	biological	biological
+v501	current marital status	social	social	social	social	social	social
+v502	currently/formerly/never in union	social	social	social	social	social	social
+v503	number of unions	behavior	social	social	social	social	social
+v504	currently residing with husband/partner	social	social	social	social	social	social
+v505	number of other wives	social	social	social	social	social	social
+v507	month of first cohabitation	social	social	social	social	social	social
+v508	year of first cohabitation	social	social	social	social	social	social
+v509	date of first cohabitation (cmc)	social	social	social	social	social	social
+v510	completeness of date information in v509	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	social	sampleCharacteristics
+v511	age at first cohabitation	behavior	social	social	social	social	social
+v512	years since first cohabitation	behavior	social	social	social	social	social
+v513	cohabitation duration (grouped)	behavior	social	social	social	social	social
+v525	age at first sex	biological	biological	social	behavior	behavior	behavior
+v527	time since last sex	behavior	behavior	social	behavior	behavior	behavior
+v528	time since last sex (in days)	behavior	behavior	social	behavior	behavior	behavior
+v529	time since last sex (in months)	behavior	behavior	social	behavior	behavior	behavior
+v530	flag for v529	other	other	other	sampleCharacteristics	behavior	other
+v531	age at first sex (imputed)	biological	behavior	social	behavior	behavior	behavior
+v532	flag for v531	other	other	other	sampleCharacteristics	behavior	other
+v535	ever been married or in union	social	social	social	social	social	social
+v536	recent sexual activity	behavior	social	social	behavior	behavior	behavior
+v714	respondent currently working	economic	economic	economic	economic	economic	economic
+v731	respondent worked in last 12 months	economic	economic	economic	economic	economic	economic
+v750	ever heard of a sexually transmitted infection (sti)	social	social	social	other	behavior	social
+v751	ever heard of aids	social	social	social	other	behavior	social
+v754bp	na - reduce risk of getting hiv: do not have sex at all	social	behavior	behavior	behavior	behavior	behavior
+v754cp	reduce risk of getting hiv: always use condoms during sex	social	behavior	behavior	behavior	behavior	behavior
+v754dp	reduce risk of getting hiv: have 1 sex partner only, who has no other partners	social	behavior	behavior	behavior	behavior	behavior
+v754jp	can get hiv from mosquito bites	social	social	social	behavior	behavior	social
+v754wp	can get hiv by sharing food with person who has aids	social	social	social	behavior	behavior	social
+v756	a healthy looking person can have hiv	social	social	social	behavior	other	social
+v761	condom used during last sex with most recent partner	behavior	behavior	behavior	behavior	behavior	behavior
+v761b	condom used during last sex with 2nd to most recent partner	behavior	behavior	behavior	behavior	behavior	behavior
+v761c	condom used during last sex with 3rd to most recent partner	behavior	behavior	behavior	behavior	behavior	behavior
+v762aa	source for condoms: government hospital	social	social	social	economic	economic	social
+v762ab	source for condoms: rural health centre	social	social	social	economic	economic	social
+v762ac	source for condoms: municipal clinic	social	social	social	economic	economic	social
+v762ad	source for condoms: znfpc clinic	social	social	social	economic	economic	social
+v762ae	source for condoms: znfpc cbd / depot holder	social	social	social	economic	economic	social
+v762af	source for condoms: village health worker	social	social	social	economic	economic	social
+v762ag	source for condoms: mohcc mobile clinic	social	social	social	economic	economic	social
+v762ah	source for condoms: mission hospital / clinic	social	social	social	economic	economic	social
+v762ai	source for condoms: other public sector	social	social	social	economic	economic	social
+v762aj	source for condoms: private hospital/clinic	social	social	social	economic	economic	social
+v762ak	source for condoms: pharmacy	social	social	social	economic	economic	social
+v762al	source for condoms: private doctor	social	social	social	economic	economic	social
+v762am	source for condoms: cbd	social	social	social	economic	economic	social
+v762an	source for condoms: private outreach clinic	social	social	social	economic	economic	social
+v762ao	na - source for condoms: cs private	social	social	social	economic	economic	social
+v762ap	na - source for condoms: cs private	social	social	social	economic	economic	social
+v762aq	na - source for condoms: cs private	social	social	social	economic	economic	social
+v762ar	source for condoms: other private medical sector	social	social	social	economic	economic	social
+v762as	source for condoms: general dealer	social	social	social	economic	economic	social
+v762at	source for condoms:supermarket / tuck shop	social	social	social	economic	economic	social
+v762au	source for condoms: public toilet, workplace (see also s730bv,s730bx)	social	social	social	economic	economic	social
+v762av	source for condoms: bottle store / bar	social	social	social	economic	economic	social
+v762aw	source for condoms: service station, church, friend /relative, or street vendor	social	social	social	economic	economic	social
+v762ax	source for condoms: other	social	social	social	economic	economic	social
+v762az	don't know any source for condoms	social	social	social	biological	economic	social
+v763a	had any sti in last 12 months	biological	biological	biological	biological	biological	biological
+v763b	had genital sore/ulcer in last 12 months	biological	biological	biological	biological	biological	biological
+v763c	had genital discharge in last 12 months	biological	biological	biological	biological	biological	biological
+v763d	na - had cs sti in last 12 months	biological	biological	biological	biological	biological	biological
+v763e	na - had cs sti in last 12 months	biological	biological	biological	biological	biological	biological
+v763f	na - had cs sti in last 12 months	biological	biological	biological	biological	biological	biological
+v763g	na - had cs sti in last 12 months	biological	biological	biological	biological	biological	biological
+v766a	number of sex partners, excluding spouse, in last 12 months	behavior	behavior	behavior	behavior	behavior	behavior
+v766b	number of sex partners, including spouse, in last 12 months	behavior	behavior	behavior	behavior	behavior	behavior
+v767a	relationship with most recent sex partner	social	social	social	behavior	behavior	social
+v767b	relationship with 2nd to most recent sex partner	social	social	social	behavior	behavior	social
+v767c	relationship with 3rd to most recent sex partner	social	social	social	behavior	behavior	social
+v768a	na - length of time knows last partner	behavior	behavior	behavior	social	behavior	behavior
+v768b	na - length of time knows other partner (1)	behavior	behavior	behavior	social	behavior	behavior
+v768c	na - length of time knows other partner (2)	behavior	behavior	behavior	social	behavior	behavior
+v769	na - can get a condom	social	social	social	behavior	behavior	social
+v769a	na - can get a female condom	social	social	social	behavior	behavior	social
+v770	sought advice/treatment for last sti infection	behavior	behavior	behavior	behavior	behavior	behavior
+v770a	sought sti advice/treatment from: government central hospital	economic	behavior	behavior	behavior	behavior	behavior
+v770b	sought sti advice/treatment from: provincial hospital	economic	behavior	behavior	behavior	behavior	behavior
+v770c	sought sti advice/treatment from: district hospital	economic	behavior	behavior	behavior	behavior	behavior
+v770d	sought sti advice/treatment from:rural hospital	economic	behavior	behavior	behavior	behavior	behavior
+v770e	sought sti advice/treatment from:rural health center / council clinic	economic	behavior	behavior	behavior	behavior	behavior
+v770f	sought sti advice/treatment from:urban municipal clinic	economic	behavior	behavior	behavior	behavior	behavior
+v770g	sought sti advice/treatment from:family planning clinic	economic	behavior	behavior	behavior	behavior	behavior
+v770h	na - sought sti advice/treatment from: cs public	economic	behavior	behavior	behavior	behavior	behavior
+v770i	na - sought sti advice/treatment from: cs public	economic	behavior	behavior	behavior	behavior	behavior
+v774a	hiv transmitted during pregnancy	social	biological	economic	behavior	behavior	behavior
+v774b	hiv transmitted during delivery	social	biological	economic	behavior	behavior	behavior
+v774c	hiv transmitted by breastfeeding	social	biological	economic	behavior	behavior	behavior
+v775	na - knows someone who has, or is suspected of having, hiv	social	social	social	behavior	behavior	social
+v777	na - would want hiv infection in family to remain secret	behavior	behavior	behavior	behavior	behavior	behavior
+v778	na - willing to care for relative with aids	behavior	behavior	behavior	behavior	behavior	behavior
+v779	na - a female teacher infected with hiv, but is not sick, should be allowed to c	behavior	behavior	behavior	behavior	behavior	behavior
+v780	na - children should be taught about condoms to avoid aids	behavior	behavior	behavior	behavior	other	behavior
+v781	ever been tested for hiv	behavior	behavior	behavior	biological	behavior	behavior
+v783	know a place to get hiv test	behavior	behavior	behavior	behavior	behavior	behavior
+v785	heard about other stis	social	social	social	behavior	behavior	social
+v820	na - condom used at first sex	behavior	behavior	behavior	behavior	behavior	behavior
+v821a	na - most recent sex partner younger, the same age or older	behavior	behavior	behavior	behavior	behavior	behavior
+v821b	na - 2nd to most recent sex partner younger, the same age or older	behavior	behavior	behavior	behavior	behavior	behavior
+v821c	na - 3rd to most recent sex partner younger, the same age or older	behavior	behavior	behavior	behavior	behavior	behavior
+v822	wife justified asking husband to use condom if he has sti	social	social	social	behavior	behavior	social
+v823	can get hiv by witchcraft or supernatural means	social	social	social	behavior	behavior	social
+v824	drugs to avoid hiv transmission to baby during pregnancy	social	social	social	behavior	behavior	social
+v825	would buy vegetables from vendor with hiv	social	social	behavior	behavior	behavior	behavior
+v826	na - last time tested for hiv	behavior	behavior	behavior	behavior	behavior	behavior
+v827	na - last hiv test: on your own, offered or required	behavior	behavior	behavior	behavior	behavior	behavior
+v828	received result from last hiv test	other	other	other	biological	behavior	other
+v801	time interview started (hhmm - 24 hour clock)	sampleCollection	sampleCollection	sampleCollection	sampleCharacteristics	sampleCollection	sampleCollection
+v802	time interview ended (hhmm - 24 hour clock)	sampleCollection	sampleCollection	sampleCollection	sampleCharacteristics	sampleCollection	sampleCollection
+v803	length of interview in minutes	sampleCollection	sampleCollection	sampleCollection	sampleCharacteristics	sampleCollection	sampleCollection
+v804	number of visits	sampleCollection	sampleCollection	sampleCollection	sampleCharacteristics	sampleCollection	sampleCollection
+v805	interviewer identification	id	id	id	id	sampleCollection	id
+v806	na - keyer identification	id	id	id	id	sampleCollection	id
+hvidx_01	line number	id	id	id	sampleCharacteristics	id	id
+hvidx_02	line number	id	id	id	sampleCharacteristics	id	id
+hvidx_03	line number	id	id	id	sampleCharacteristics	id	id
+hvidx_04	line number	id	id	id	sampleCharacteristics	id	id
+hvidx_05	line number	id	id	id	sampleCharacteristics	id	id
+hvidx_06	line number	id	id	id	sampleCharacteristics	id	id
+hvidx_07	line number	id	id	id	sampleCharacteristics	id	id
+hvidx_08	line number	id	id	id	sampleCharacteristics	id	id
+hvidx_09	line number	id	id	id	sampleCharacteristics	id	id
+hvidx_10	line number	id	id	id	sampleCharacteristics	id	id
+hvidx_11	line number	id	id	id	sampleCharacteristics	id	id
+hvidx_12	line number	id	id	id	sampleCharacteristics	id	id
+hvidx_13	line number	id	id	id	sampleCharacteristics	id	id
+hvidx_14	line number	id	id	id	sampleCharacteristics	id	id
+hvidx_15	line number	id	id	id	sampleCharacteristics	id	id
+hvidx_16	line number	id	id	id	sampleCharacteristics	id	id
+hv101_01	relationship to head	social	social	social	social	social	social
+hv101_02	relationship to head	social	social	social	social	social	social
+hv101_03	relationship to head	social	social	social	social	social	social
+hv101_04	relationship to head	social	social	social	social	social	social
+hv101_05	relationship to head	social	social	social	social	social	social
+hv101_06	relationship to head	social	social	social	social	social	social
+hv101_07	relationship to head	social	social	social	social	social	social
+hv101_08	relationship to head	social	social	social	social	social	social
+hv101_09	relationship to head	social	social	social	social	social	social
+hv101_10	relationship to head	social	social	social	social	social	social
+hv101_11	relationship to head	social	social	social	social	social	social
+hv101_12	relationship to head	social	social	social	social	social	social
+hv101_13	relationship to head	social	social	social	social	social	social
+hv101_14	relationship to head	social	social	social	social	social	social
+hv101_15	relationship to head	social	social	social	social	social	social
+hv101_16	relationship to head	social	social	social	social	social	social
+hv102_01	usual resident	social	social	location	social	social	social
+hv102_02	usual resident	social	social	location	social	social	social
+hv102_03	usual resident	social	social	location	social	social	social
+hv102_04	usual resident	social	social	location	social	social	social
+hv102_05	usual resident	social	social	location	social	social	social
+hv102_06	usual resident	social	social	location	social	social	social
+hv102_07	usual resident	social	social	location	social	social	social
+hv102_08	usual resident	social	social	location	social	social	social
+hv102_09	usual resident	social	social	location	social	social	social
+hv102_10	usual resident	social	social	location	social	social	social
+hv102_11	usual resident	social	social	location	social	social	social
+hv102_12	usual resident	social	social	location	social	social	social
+hv102_13	usual resident	social	social	location	social	social	social
+hv102_14	usual resident	social	social	location	social	social	social
+hv102_15	usual resident	social	social	location	social	social	social
+hv102_16	usual resident	social	social	location	social	social	social
+hv103_01	slept last night	behavior	behavior	behavior	social	behavior	behavior
+hv103_02	slept last night	behavior	behavior	behavior	social	behavior	behavior
+hv103_03	slept last night	behavior	behavior	behavior	social	behavior	behavior
+hv103_04	slept last night	behavior	behavior	behavior	social	behavior	behavior
+hv103_05	slept last night	behavior	behavior	behavior	social	behavior	behavior
+hv103_06	slept last night	behavior	behavior	behavior	social	behavior	behavior
+hv103_07	slept last night	behavior	behavior	behavior	social	behavior	behavior
+hv103_08	slept last night	behavior	behavior	behavior	social	behavior	behavior
+hv103_09	slept last night	behavior	behavior	behavior	social	behavior	behavior
+hv103_10	slept last night	behavior	behavior	behavior	social	behavior	behavior
+hv103_11	slept last night	behavior	behavior	behavior	social	behavior	behavior
+hv103_12	slept last night	behavior	behavior	behavior	social	behavior	behavior
+hv103_13	slept last night	behavior	behavior	behavior	social	behavior	behavior
+hv103_14	slept last night	behavior	behavior	behavior	social	behavior	behavior
+hv103_15	slept last night	behavior	behavior	behavior	social	behavior	behavior
+hv103_16	slept last night	behavior	behavior	behavior	social	behavior	behavior
+hv104_01	sex of household member	biological	biological	biological	social	biological	biological
+hv104_02	sex of household member	biological	biological	biological	social	biological	biological
+hv104_03	sex of household member	biological	biological	biological	social	biological	biological
+hv104_04	sex of household member	biological	biological	biological	social	biological	biological
+hv104_05	sex of household member	biological	biological	biological	social	biological	biological
+hv104_06	sex of household member	biological	biological	biological	social	biological	biological
+hv104_07	sex of household member	biological	biological	biological	social	biological	biological
+hv104_08	sex of household member	biological	biological	biological	social	biological	biological
+hv104_09	sex of household member	biological	biological	biological	social	biological	biological
+hv104_10	sex of household member	biological	biological	biological	social	biological	biological
+hv104_11	sex of household member	biological	biological	biological	social	biological	biological
+hv104_12	sex of household member	biological	biological	biological	social	biological	biological
+hv104_13	sex of household member	biological	biological	biological	social	biological	biological
+hv104_14	sex of household member	biological	biological	biological	social	biological	biological
+hv104_15	sex of household member	biological	biological	biological	social	biological	biological
+hv104_16	sex of household member	biological	biological	biological	social	biological	biological
+hv105_01	age of household members	biological	biological	biological	social	biological	biological
+hv105_02	age of household members	biological	biological	biological	social	biological	biological
+hv105_03	age of household members	biological	biological	biological	social	biological	biological
+hv105_04	age of household members	biological	biological	biological	social	biological	biological
+hv105_05	age of household members	biological	biological	biological	social	biological	biological
+hv105_06	age of household members	biological	biological	biological	social	biological	biological
+hv105_07	age of household members	biological	biological	biological	social	biological	biological
+hv105_08	age of household members	biological	biological	biological	social	biological	biological
+hv105_09	age of household members	biological	biological	biological	social	biological	biological
+hv105_10	age of household members	biological	biological	biological	social	biological	biological
+hv105_11	age of household members	biological	biological	biological	social	biological	biological
+hv105_12	age of household members	biological	biological	biological	social	biological	biological
+hv105_13	age of household members	biological	biological	biological	social	biological	biological
+hv105_14	age of household members	biological	biological	biological	social	biological	biological
+hv105_15	age of household members	biological	biological	biological	social	biological	biological
+hv105_16	age of household members	biological	biological	biological	social	biological	biological
+hv106_01	highest educational level attained	social	social	social	social	economic	social
+hv106_02	highest educational level attained	social	social	social	social	economic	social
+hv106_03	highest educational level attained	social	social	social	social	economic	social
+hv106_04	highest educational level attained	social	social	social	social	economic	social
+hv106_05	highest educational level attained	social	social	social	social	economic	social
+hv106_06	highest educational level attained	social	social	social	social	economic	social
+hv106_07	highest educational level attained	social	social	social	social	economic	social
+hv106_08	highest educational level attained	social	social	social	social	economic	social
+hv106_09	highest educational level attained	social	social	social	social	economic	social
+hv106_10	highest educational level attained	social	social	social	social	economic	social
+hv106_11	highest educational level attained	social	social	social	social	economic	social
+hv106_12	highest educational level attained	social	social	social	social	economic	social
+hv106_13	highest educational level attained	social	social	social	social	economic	social
+hv106_14	highest educational level attained	social	social	social	social	economic	social
+hv106_15	highest educational level attained	social	social	social	social	economic	social
+hv106_16	highest educational level attained	social	social	social	social	economic	social
+hv107_01	highest year of education completed	social	social	social	social	economic	social
+hv107_02	highest year of education completed	social	social	social	social	economic	social
+hv107_03	highest year of education completed	social	social	social	social	economic	social
+hv107_04	highest year of education completed	social	social	social	social	economic	social
+hv107_05	highest year of education completed	social	social	social	social	economic	social
+hv107_06	highest year of education completed	social	social	social	social	economic	social
+hv107_07	highest year of education completed	social	social	social	social	economic	social
+hv107_08	highest year of education completed	social	social	social	social	economic	social
+hv107_09	highest year of education completed	social	social	social	social	economic	social
+hv107_10	highest year of education completed	social	social	social	social	economic	social
+hv107_11	highest year of education completed	social	social	social	social	economic	social
+hv107_12	highest year of education completed	social	social	social	social	economic	social
+hv107_13	highest year of education completed	social	social	social	social	economic	social
+hv107_14	highest year of education completed	social	social	social	social	economic	social
+hv107_15	highest year of education completed	social	social	social	social	economic	social
+hv107_16	highest year of education completed	social	social	social	social	economic	social
+hv108_01	education completed in single years	social	social	social	social	economic	social
+hv108_02	education completed in single years	social	social	social	social	economic	social
+hv108_03	education completed in single years	social	social	social	social	economic	social
+hv108_04	education completed in single years	social	social	social	social	economic	social
+hv108_05	education completed in single years	social	social	social	social	economic	social
+hv108_06	education completed in single years	social	social	social	social	economic	social
+hv108_07	education completed in single years	social	social	social	social	economic	social
+hv108_08	education completed in single years	social	social	social	social	economic	social
+hv108_09	education completed in single years	social	social	social	social	economic	social
+hv108_10	education completed in single years	social	social	social	social	economic	social
+hv108_11	education completed in single years	social	social	social	social	economic	social
+hv108_12	education completed in single years	social	social	social	social	economic	social
+hv108_13	education completed in single years	social	social	social	social	economic	social
+hv108_14	education completed in single years	social	social	social	social	economic	social
+hv108_15	education completed in single years	social	social	social	social	economic	social
+hv108_16	education completed in single years	social	social	social	social	economic	social
+hv109_01	educational attainment	social	social	social	social	economic	social
+hv109_02	educational attainment	social	social	social	social	economic	social
+hv109_03	educational attainment	social	social	social	social	economic	social
+hv109_04	educational attainment	social	social	social	social	economic	social
+hv109_05	educational attainment	social	social	social	social	economic	social
+hv109_06	educational attainment	social	social	social	social	economic	social
+hv109_07	educational attainment	social	social	social	social	economic	social
+hv109_08	educational attainment	social	social	social	social	economic	social
+hv109_09	educational attainment	social	social	social	social	economic	social
+hv109_10	educational attainment	social	social	social	social	economic	social
+hv109_11	educational attainment	social	social	social	social	economic	social
+hv109_12	educational attainment	social	social	social	social	economic	social
+hv109_13	educational attainment	social	social	social	social	economic	social
+hv109_14	educational attainment	social	social	social	social	economic	social
+hv109_15	educational attainment	social	social	social	social	economic	social
+hv109_16	educational attainment	social	social	social	social	economic	social
+hv110_01	na - member still in school	social	social	social	social	economic	social
+hv110_02	na - member still in school	social	social	social	social	economic	social
+hv110_03	na - member still in school	social	social	social	social	economic	social
+hv110_04	na - member still in school	social	social	social	social	economic	social
+hv110_05	na - member still in school	social	social	social	social	economic	social
+hv110_06	na - member still in school	social	social	social	social	economic	social
+hv110_07	na - member still in school	social	social	social	social	economic	social
+hv110_08	na - member still in school	social	social	social	social	economic	social
+hv110_09	na - member still in school	social	social	social	social	economic	social
+hv110_10	na - member still in school	social	social	social	social	economic	social
+hv110_11	na - member still in school	social	social	social	social	economic	social
+hv110_12	na - member still in school	social	social	social	social	economic	social
+hv110_13	na - member still in school	social	social	social	social	economic	social
+hv110_14	na - member still in school	social	social	social	social	economic	social
+hv110_15	na - member still in school	social	social	social	social	economic	social
+hv110_16	na - member still in school	social	social	social	social	economic	social
+hv111_01	mother alive	other	other	other	social	social	other
+hv111_02	mother alive	other	biological	other	social	social	other
+hv111_03	mother alive	other	biological	other	social	social	other
+hv111_04	mother alive	other	biological	other	social	social	other
+hv111_05	mother alive	other	biological	other	social	social	other
+hv111_06	mother alive	other	biological	other	social	social	other
+hv111_07	mother alive	other	biological	other	social	social	other
+hv111_08	mother alive	other	biological	other	social	social	other
+hv111_09	mother alive	other	biological	other	social	social	other
+hv111_10	mother alive	other	biological	other	social	social	other
+hv111_11	mother alive	other	biological	other	social	social	other
+hv111_12	mother alive	other	biological	other	social	social	other
+hv111_13	mother alive	other	biological	other	social	social	other
+hv111_14	mother alive	other	biological	other	social	social	other
+hv111_15	mother alive	other	biological	other	social	social	other
+hv111_16	mother alive	other	biological	other	social	social	other
+hv112_01	mother's line number	id	id	id	sampleCharacteristics	id	id
+hv112_02	mother's line number	id	id	id	sampleCharacteristics	id	id
+hv112_03	mother's line number	id	id	id	sampleCharacteristics	id	id
+hv112_04	mother's line number	id	id	id	sampleCharacteristics	id	id
+hv112_05	mother's line number	id	id	id	sampleCharacteristics	id	id
+hv112_06	mother's line number	id	id	id	sampleCharacteristics	id	id
+hv112_07	mother's line number	id	id	id	sampleCharacteristics	id	id
+hv112_08	mother's line number	id	id	id	sampleCharacteristics	id	id
+hv112_09	mother's line number	id	id	id	sampleCharacteristics	id	id
+hv112_10	mother's line number	id	id	id	sampleCharacteristics	id	id
+hv112_11	mother's line number	id	id	id	sampleCharacteristics	id	id
+hv112_12	mother's line number	id	id	id	sampleCharacteristics	id	id
+hv112_13	mother's line number	id	id	id	sampleCharacteristics	id	id
+hv112_14	mother's line number	id	id	id	sampleCharacteristics	id	id
+hv112_15	mother's line number	id	id	id	sampleCharacteristics	id	id
+hv112_16	mother's line number	id	id	id	sampleCharacteristics	id	id
+hv113_01	father alive	other	biological	other	social	social	other
+hv113_02	father alive	other	biological	other	social	social	other
+hv113_03	father alive	other	biological	other	social	social	other
+hv113_04	father alive	other	biological	other	social	social	other
+hv113_05	father alive	other	biological	other	social	social	other
+hv113_06	father alive	other	biological	other	social	social	other
+hv113_07	father alive	other	biological	other	social	social	other
+hv113_08	father alive	other	biological	other	social	social	other
+hv113_09	father alive	other	biological	other	social	social	other
+hv113_10	father alive	other	biological	other	social	social	other
+hv113_11	father alive	other	biological	other	social	social	other
+hv113_12	father alive	other	biological	other	social	social	other
+hv113_13	father alive	other	biological	other	social	social	other
+hv113_14	father alive	other	biological	other	social	social	other
+hv113_15	father alive	other	biological	other	social	social	other
+hv113_16	father alive	other	biological	other	social	social	other
+hv114_01	father's line number	id	id	id	sampleCharacteristics	id	id
+hv114_02	father's line number	id	id	id	sampleCharacteristics	id	id
+hv114_03	father's line number	id	id	id	sampleCharacteristics	id	id
+hv114_04	father's line number	id	id	id	sampleCharacteristics	id	id
+hv114_05	father's line number	id	id	id	sampleCharacteristics	id	id
+hv114_06	father's line number	id	id	id	sampleCharacteristics	id	id
+hv114_07	father's line number	id	id	id	sampleCharacteristics	id	id
+hv114_08	father's line number	id	id	id	sampleCharacteristics	id	id
+hv114_09	father's line number	id	id	id	sampleCharacteristics	id	id
+hv114_10	father's line number	id	id	id	sampleCharacteristics	id	id
+hv114_11	father's line number	id	id	id	sampleCharacteristics	id	id
+hv114_12	father's line number	id	id	id	sampleCharacteristics	id	id
+hv114_13	father's line number	id	id	id	sampleCharacteristics	id	id
+hv114_14	father's line number	id	id	id	sampleCharacteristics	id	id
+hv114_15	father's line number	id	id	id	sampleCharacteristics	id	id
+hv114_16	father's line number	id	id	id	sampleCharacteristics	id	id
+hv117_01	eligibility for female interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv117_02	eligibility for female interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv117_03	eligibility for female interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv117_04	eligibility for female interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv117_05	eligibility for female interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv117_06	eligibility for female interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv117_07	eligibility for female interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv117_08	eligibility for female interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv117_09	eligibility for female interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv117_10	eligibility for female interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv117_11	eligibility for female interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv117_12	eligibility for female interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv117_13	eligibility for female interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv117_14	eligibility for female interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv117_15	eligibility for female interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv117_16	eligibility for female interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv118_01	eligibility for male interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv118_02	eligibility for male interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv118_03	eligibility for male interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv118_04	eligibility for male interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv118_05	eligibility for male interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv118_06	eligibility for male interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv118_07	eligibility for male interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv118_08	eligibility for male interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv118_09	eligibility for male interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv118_10	eligibility for male interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv118_11	eligibility for male interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv118_12	eligibility for male interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv118_13	eligibility for male interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv118_14	eligibility for male interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv118_15	eligibility for male interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv118_16	eligibility for male interview	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv120_01	children eligibility for height/weight and hemoglobin	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv120_02	children eligibility for height/weight and hemoglobin	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv120_03	children eligibility for height/weight and hemoglobin	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv120_04	children eligibility for height/weight and hemoglobin	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv120_05	children eligibility for height/weight and hemoglobin	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv120_06	children eligibility for height/weight and hemoglobin	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv120_07	children eligibility for height/weight and hemoglobin	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv120_08	children eligibility for height/weight and hemoglobin	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv120_09	children eligibility for height/weight and hemoglobin	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv120_10	children eligibility for height/weight and hemoglobin	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv120_11	children eligibility for height/weight and hemoglobin	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv120_12	children eligibility for height/weight and hemoglobin	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv120_13	children eligibility for height/weight and hemoglobin	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv120_14	children eligibility for height/weight and hemoglobin	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv120_15	children eligibility for height/weight and hemoglobin	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hv120_16	children eligibility for height/weight and hemoglobin	other	sampleCollection	social	sampleCollection	sampleCollection	sampleCollection
+hivclust	cluster	sampleCollection	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics
+hivnumb	household	sampleCollection	id	id	sampleCharacteristics	id	id
+hivline	line	id	id	id	sampleCharacteristics	id	id
+hiv01	NA	id	other	other	sampleCharacteristics	other	other
+hiv02	lab number	id	id	id	sampleCharacteristics	other	id
+hiv03	blood test result	biological	biological	biological	biological	NA	biological
+hiv05	sample weight	sampleCharacteristics	sampleCharacteristics	sampleCharacteristics	sampleCollection	sampleCharacteristics	sampleCharacteristics

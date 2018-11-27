@@ -1,0 +1,50 @@
+---
+title: "Sample Meta-analysis Viewer"
+output:
+  html_document:
+    df_print: paged
+---
+
+### View FDR signficant and replicated findings across sub-Saharan Africa
+
+```{r include=FALSE}
+library('tidyverse')
+library('metafor')
+library('DT')
+load('./meta_data/meta_hiv_110518.Rdata')
+category_table <- read_tsv('./dd.common.final.tsv')
+
+meta_analysis_continent <- left_join(meta_analysis_continent, category_table, by=c('var'='Variable'))
+
+```
+
+### Number of variables found in 'X' number of surveys
+```{r}
+NUM_SURVEY_THRESHOLD <- 25
+variables_num_surveys <- as.tibble(table(meta_analysis_continent$num_surveys)) %>% rename(num_surveys=Var1)
+variables_num_surveys$num_surveys <- as.numeric(variables_num_surveys$num_surveys)
+DT::datatable(variables_num_surveys, rownames = F)
+NUM_SURVEY_THRESHOLD
+sum((variables_num_surveys %>% filter(num_surveys >= NUM_SURVEY_THRESHOLD))[, 'n'])
+```
+
+
+### plot the variables found in >= X surveys
+```{r}
+meta_analysis_continent <- merge(varDesc, meta_analysis_continent)
+meta_analysis_high_cnt <- meta_analysis_continent %>% filter(num_surveys >= NUM_SURVEY_THRESHOLD)
+
+for(ii in 1:nrow(meta_analysis_high_cnt)) {
+  mod <- (meta_analysis_high_cnt[ii, 'meta'])
+  varname <- meta_analysis_high_cnt[ii, 'var']
+  varlabel <- meta_analysis_high_cnt[ii, 'varlabel']
+  gender <- meta_analysis_high_cnt[ii, 'gender']
+  i2 <- mod[[1]]$I2
+  forest(mod[[1]])
+  title(sprintf('%s: %s (%s) I2=%02f', gender, varlabel, varname, i2))
+}
+
+```
+
+
+
