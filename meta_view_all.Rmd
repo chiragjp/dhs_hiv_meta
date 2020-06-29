@@ -1,0 +1,156 @@
+---
+title: "Meta-analysis of HIV"
+author: "Chirag Patel"
+date: "3/24/2019"
+output: html_document
+---
+
+
+```{r echo=FALSE}
+library('tidyverse')
+library('metafor')
+library('DT')
+```
+
+
+
+# TODO
+- correlation of factors - done
+
+- meta-analysis across all surveys in males and females
+- meta-analysis for individual countries in males and females
+
+- Which are most explanatory?- Sheet1 of https://docs.google.com/spreadsheets/d/15_lq0BlrNlzqY1zxqmMSpOcD45J4g0VLJBlcEWuuuPc/edit#gid=630309594
+mean(R2)
+Bonferroni pvalue
+- Which are most consistent across the countries (todo)
+mean(R2)
+Bonferroni pvalue 
+Lower I2 (< 10-20%); QEp (pvalue for heterogeneity > 0.05)
+
+3.) pick the variables that come across the most (heuristic 1 and 2). How much variation do we see
+between men and women (or in women and not men);
+how much do we see over time?; before and after 2010
+how much  country (or region)? Southern Africa: South Africa, Zimbabwe, Namibia, Zambia; Eastern Africa: Tanzania, Mozambique, Kenya, Rwanda, Burundi, Uganda; Central and Western Africa: Nigera, Congo, all of West African countries (Benin, Sierra Leone, Ivory coast, Liberia, Ghana, Mali)
+
+
+### beta/R2/I2 vs -log10(pvalue)
+```{r}
+source('0_load_and_filter_rmd.R')
+
+```
+
+# Distribution of number of times a surveys a variable appears in
+```{r}
+num_vars_by_k <- meta_combined_simple_filtered %>% group_by(k, gender) %>% summarize(num_variables=n())
+num_vars_by_k_m <- num_vars_by_k %>% ungroup() %>% filter(gender == 'm')
+num_vars_by_k_m[order(num_vars_by_k_m$k),'cumsum'] <- cumsum(num_vars_by_k_m[order(num_vars_by_k_m$k),'num_variables'] )
+num_vars_by_k_f <- num_vars_by_k %>% ungroup() %>% filter(gender == 'f')
+num_vars_by_k_f[order(num_vars_by_k_m$k),'cumsum'] <- cumsum(num_vars_by_k_m[order(num_vars_by_k_f$k),'num_variables'] )
+num_vars_by_k <- rbind(num_vars_by_k_m, num_vars_by_k_f)
+
+p <- ggplot(num_vars_by_k , aes(k, cumsum))
+p <- p + geom_point() + geom_line() + facet_wrap(~gender, nrow=1) + ylab('Number of variables') + xlab('Number of surveys')
+p <- p + geom_vline(xintercept = c(1, 3, 10, 50), col='red')
+p
+
+hist(meta_combined_simple_filtered$k, main='', xlab='Number of Surveys')
+variable_survey_appearance <- quantile(meta_combined_simple_filtered$k, na.rm = T, probs=c(.5, .75, .8, .85, .9, 1))
+variable_survey_appearance
+# number of variables that appear in k surveys
+
+## for each country, what is the distribution
+variable_survey_appearance_country <- meta_country_simple_filtered %>% group_by(country) %>% summarize(max=max(k), q_median=quantile(k, probs=.5, na.rm=T), q_75=quantile(k, probs=.75, na.rm=T), q_85=quantile(k, probs=.85, na.rm=T), q_9=quantile(k, probs=.9, na.rm=T), q_100=quantile(k, probs=1, na.rm=T))
+variable_survey_appearance_country %>% arrange(desc(max))
+
+```
+
+## Number of associations
+```{r}
+number_of_associations
+M <- length(unique(meta_combined_simple_filtered$var))
+BONF_THRESHOLD <- 1e-7
+```
+
+```{r}
+p <- ggplot(meta_combined_simple_filtered, aes(beta, -log10(pvalue)))
+p <- p + geom_point(alpha=.1) + facet_grid(num_surveys~gender)
+p <- p + geom_hline(yintercept=-log10(BONF_THRESHOLD))
+p
+
+p <- ggplot(meta_combined_simple_filtered, aes(mean_r2, -log10(pvalue)))
+p <- p + geom_point(alpha=.1) + facet_grid(num_surveys~gender)
+p <- p + geom_hline(yintercept=-log10(BONF_THRESHOLD))
+p
+
+
+p <- ggplot(meta_combined_simple_filtered, aes(mean_r2, -log10(pvalue)))
+p <- p + geom_point(alpha=.1) + scale_x_continuous(limits=c(0,.2)) + facet_grid(num_surveys~gender)
+p <- p + geom_hline(yintercept=-log10(BONF_THRESHOLD))
+p 
+
+p <- ggplot(meta_combined_simple_filtered %>% filter(pvalue < (BONF_THRESHOLD)), aes(mean_r2, -log10(pvalue)))
+p <- p + geom_point(alpha=.1) + scale_x_continuous(limits=c(0,.2)) + facet_grid(num_surveys~gender)
+p <- p + geom_hline(yintercept=-log10(BONF_THRESHOLD))
+p 
+
+p <- ggplot(meta_combined_simple_filtered, aes(I2, -log10(pvalue)))
+p <- p + geom_point(alpha=.1) + facet_grid(num_surveys~gender)
+p <- p + geom_hline(yintercept=-log10(BONF_THRESHOLD))
+p
+
+p <- ggplot(meta_combined_simple_filtered %>% filter(pvalue < (BONF_THRESHOLD)), aes(beta, mean_r2))
+p <- p + geom_point(alpha=.1) + scale_y_continuous(limits=c(0,.2)) + facet_grid(num_surveys~gender)
+p
+```
+
+## Specific quantiles of summary statistics
+```{r}
+quantile(abs(meta_combined_simple_filtered$beta), probs=c(.5, .75, .9, .95), na.rm=T)
+quantile(abs(meta_combined_simple_filtered$mean_r2), probs=c(.5, .75, .9, .95, .99), na.rm=T) ## top 95th percentle is .005
+```
+
+## Now only plot those that have p-values less than Bonf and also R2 > 0.05
+```{r}
+meta_combined_simple_filtered_sig <- meta_combined_simple_filtered %>% filter(!is.na(beta), mean_r2 >= 0.005, pvalue < BONF_THRESHOLD)
+p <- ggplot(meta_combined_simple_filtered_sig, aes(mean_r2, -log10(pvalue)))
+p <- p + geom_point()
+p
+
+meta_combined_simple_filtered_sig
+
+```
+
+## Concordance of beta/I2 between genders
+```{r}
+males <- meta_combined_simple_filtered %>% filter( gender == 'm')
+females <- meta_combined_simple_filtered %>% filter(gender == 'f')
+femaleMale <- females %>% inner_join(males, by='name', suffix=c('_female', '_male'))
+femaleMale <- femaleMale %>% mutate(gender_sig=case_when(
+  pvalue_female < BONF_THRESHOLD & pvalue_male < BONF_THRESHOLD ~ 'both', 
+  pvalue_female < BONF_THRESHOLD ~ 'female', 
+  pvalue_male < BONF_THRESHOLD ~ 'male', 
+  TRUE ~ 'none'))
+
+genderConcordance <- femaleMale %>% group_by(gender_sig) %>% summarise(correlation=cor(beta_female, beta_male, use = 'pairwise.complete.obs'))
+                                    
+p <- ggplot(femaleMale, aes(beta_female, beta_male))
+p <- p + geom_point(alpha=.1) + geom_abline() + facet_wrap(~gender_sig)
+p
+
+p <- ggplot(femaleMale, aes(I2_female, I2_male))
+p <- p + geom_point(alpha=.1) + geom_abline() + facet_wrap(~gender_sig)
+p
+
+genderConcordance
+
+
+
+```
+
+# Output all
+```{r}
+write_csv(femaleMale %>% filter(gender_sig == 'both', sign(beta_female) != sign(beta_male)) %>% select(name, var_lbl_female,lvl_lbl_female, beta_female, beta_male, pvalue_male, pvalue_female), path='./meta_data/meta_combined_simple_gender_opposite_sign.csv')
+write_csv(meta_combined_simple_filtered %>% filter(gender == 'f'), path='./meta_data/meta_combined_female_simple.csv')
+write_csv(meta_combined_simple_filtered %>% filter(gender == 'm'), path='./meta_data/meta_combined_male_simple.csv')
+```

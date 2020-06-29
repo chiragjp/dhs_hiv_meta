@@ -1,0 +1,417 @@
+---
+title: "Figures and Tables for Meta XWAS in HIV"
+author: "Chirag Patel"
+date: "06/12/2020"
+output: html_document
+---
+
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+library(tidyverse)
+library(scales)
+library(ggrepel)
+library(DT)
+library(gt)
+library(gplots)
+library(cowplot)
+load('./meta_data/meta_filtered_data.Rdata')
+```
+# How many variables interrogated?
+```{r}
+print(length(unique(meta_combined_simple_filtered$name)))
+```
+
+
+```{r echo=FALSE}
+number_of_associations_total <- meta_combined_simple_filtered %>% group_by(gender) %>% summarize(n=n())
+number_of_associations <- meta_combined_simple_filtered %>% group_by(k, gender) %>% summarize(n=n())
+
+meta_combined_simple_filtered %>% filter(gender == 'f', k == 1) %>% summarize(n=n())
+meta_combined_simple_filtered %>% filter( k == 50) %>% group_by(gender) %>% summarize(n=n())
+
+
+number_of_associations_country <- meta_country_simple_filtered %>% group_by(k, country, gender) %>% summarize(n=n())
+
+
+# Supplementary Figure 1A and B
+number_of_associations_p <- ggplot(number_of_associations, aes(k,n))
+number_of_associations_p <- number_of_associations_p + geom_point() + geom_line() + scale_y_log10() + facet_grid(.~gender, labeller=labeller(gender = c(f = "Female", m = "Male")))
+number_of_associations_p <- number_of_associations_p + ylab('# Variables') + xlab('Number of Surveys')
+
+
+
+```
+
+```{r echo=FALSE}
+number_of_associations_country_p <- ggplot(number_of_associations_country, aes(country,n, color=factor(k)))
+number_of_associations_country_p <- number_of_associations_country_p + geom_bar(stat='identity',position = position_dodge2(preserve = "single")) + scale_y_log10() + facet_grid(.~gender, labeller=labeller(gender = c(f = "Female", m = "Male")))
+number_of_associations_country_p <- number_of_associations_country_p + ylab('# Variables')
+number_of_associations_country_p <- number_of_associations_country_p + theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position = 'none')
+
+plot_grid(number_of_associations_p,number_of_associations_country_p, nrow=2, rel_heights = c(1,2), labels=c('A', 'B'))
+```
+# quantiles of R2
+```{r}
+quantile(meta_combined_simple_filtered$mean_r2, probs=c(0.5, .75 , .99), na.rm = T)
+```
+
+
+
+```{r, echo=FALSE}
+num_countries_per_var <- meta_country_simple_filtered %>% group_by( name, gender) %>% summarize(num_country=n()) %>% ungroup()
+#number_of_associations_country <- meta_country_simple_filtered %>% group_by(k, country, gender) %>% summarize(n=n())
+quantile(num_countries_per_var$num_country[num_countries_per_var$gender == 'm'], probs=c(.5, .75, .8, .9, .95, .975, .99))
+quantile(num_countries_per_var$num_country[num_countries_per_var$gender == 'f'], probs=c(.5, .75, .8, .9, .95, .975, .99))
+num_countries_per_var_to_merge <- num_countries_per_var %>% mutate(num_country_bin = cut(num_country, breaks=c(0,1,10,20,30))) %>% unite(key, name, gender)
+
+#meta_combined_simple_filtered$num_surveys <- cut(meta_combined_simple_filtered$k, breaks=c(0,1,5,10,15,20,25,30, 35,40, 45, 50))
+meta_combined_simple_filtered$num_surveys <- cut(meta_combined_simple_filtered$k, breaks=c(0,1,10,20,30,40, 50))
+meta_combined_simple_filtered <- meta_combined_simple_filtered %>% unite(key, name, gender, remove = F) %>% left_join(num_countries_per_var_to_merge)
+
+```
+
+# R^2 vs. -log10(pvalue), stratified by country number and gender
+```{r echo=FALSE}
+## how many identified per each bin
+R2_thresh <- 0.001 # top 25%
+p_thresh <- 1e-6
+meta_combined_simple_filtered <- meta_combined_simple_filtered %>% mutate(nlp=-log10(pvalue))
+meta_combined_simple_filtered <- meta_combined_simple_filtered %>% mutate(nlp=ifelse(nlp > 100, 100, nlp))
+
+p <- ggplot(meta_combined_simple_filtered, aes(mean_r2, nlp))
+p <- p + geom_point(alpha=0.05, color='blue') + scale_x_continuous(limits=c(0, .02)) + scale_y_continuous(limits=c(0, 100))
+p <- p + geom_hline(yintercept = -log10(p_thresh), linetype="dashed") + geom_vline(xintercept=R2_thresh, linetype="dashed")
+p <- p + facet_grid(num_country_bin ~ gender, labeller=labeller(gender = c(f = "Female", m = "Male"))) 
+p <- p + geom_point(alpha=.7, data=meta_combined_simple_filtered %>% filter(pvalue < p_thresh, mean_r2 >= R2_thresh), aes(mean_r2, nlp))
+p <- p + xlab('Average R^2 Across Surveys') + ylab('-log10(pvalue)')
+p
+```
+
+```{r echo=FALSE}
+meta_combined_simple_filtered <- meta_combined_simple_filtered %>% mutate(odds_ratio=exp(beta))
+meta_combined_simple_filtered <- meta_combined_simple_filtered %>% mutate(odds_ratio2=case_when
+                                                                          (odds_ratio > 100 ~ 100,
+                                                                            odds_ratio < 0.01 ~ 0.01,
+                                                                            TRUE ~ odds_ratio)) 
+p <- ggplot(meta_combined_simple_filtered, aes(odds_ratio2, nlp))
+p <- p + geom_point(alpha=0.05, color='blue') + scale_y_continuous(limits=c(0, 100)) + scale_x_log10(limits=c(.01,100))
+p <- p + geom_hline(yintercept = -log10(p_thresh), linetype="dashed")
+p <- p + facet_grid(num_country_bin ~ gender,labeller=labeller(gender = c(f = "Female", m = "Male"))) 
+p <- p + geom_point(alpha=.7, data=meta_combined_simple_filtered %>% filter(pvalue < p_thresh, mean_r2 >= R2_thresh), aes(odds_ratio2, nlp))
+p <- p + xlab('Odds Ratio Across Surveys') + ylab('-log10(pvalue)')
+p
+```
+
+# I^2 vs. -log10(pvalue), stratified by survey number and gender
+```{r echo=FALSE}
+p <- ggplot(meta_combined_simple_filtered %>% filter(num_country > 1, pvalue < p_thresh,mean_r2 > R2_thresh), aes(mean_r2, I2))
+p <- p + geom_hline(yintercept=50, linetype='dashed')
+p <- p + geom_point(alpha=0.7) + scale_x_continuous(limits=c(0, .02)) +facet_grid(num_country_bin ~ gender) 
+p <- p + xlab('I^2 of Priortized Factors')
+p
+```
+
+# Summary Statistics Tables
+
+## Table 2
+```{r}
+identified <- meta_combined_simple_filtered %>% mutate(sig=(pvalue < p_thresh) & (mean_r2 >= R2_thresh))
+identified %>% filter(sig == T) %>% group_by(gender) %>% tally()
+identified %>% filter(sig == T) %>% group_by(sig, gender, num_country_bin) %>% tally()
+
+association_summary_table <- identified %>% group_by(num_country_bin, gender) %>% summarize(n=n(),
+  q_25_or=quantile(exp(abs(beta)),probs=.25), q_50_or=quantile(exp(abs(beta)),probs=.5), q_75_or = quantile(exp(abs(beta)),probs=.75), q_25_I2=quantile(I2,probs=.25), q_50_I2=quantile(I2,probs=.5),q_75_I2 = quantile(I2,probs=.75),
+  q_25_r2=quantile(mean_r2,probs=.25), q_50_r2=quantile(mean_r2,probs=.5), q_75_r2 = quantile(mean_r2,probs=.75)
+  )
+
+
+association_summary_table %>% gt() %>% fmt_number(columns = contains('q_'), decimals = 2) %>% fmt_scientific(columns = ends_with("r2"))
+
+association_summary_table_sig <- identified %>% filter(sig == T) %>% group_by(num_country_bin, gender) %>% summarize(n=n(),
+  q_25_or=quantile(exp(abs(beta)),probs=.25), q_50_or=quantile(exp(abs(beta)),probs=.5), q_75_or = quantile(exp(abs(beta)),probs=.75), q_25_I2=quantile(I2,probs=.25), q_50_I2=quantile(I2,probs=.5),q_75_I2 = quantile(I2,probs=.75),
+  q_25_r2=quantile(mean_r2,probs=.25), q_50_r2=quantile(mean_r2,probs=.5), q_75_r2 = quantile(mean_r2,probs=.75)
+  )
+
+association_summary_table_sig %>% gt() %>% fmt_number(columns = contains('q_'), decimals = 2) %>% fmt_scientific(columns = ends_with("r2"))
+
+
+association_summary_table_sig_29 <- identified %>% filter(sig == T, num_country==29) %>% group_by(gender) %>% summarize(n=n(),
+  q_25_or=quantile(exp(abs(beta)),probs=.25), q_50_or=quantile(exp(abs(beta)),probs=.5), q_75_or = quantile(exp(abs(beta)),probs=.75), q_25_I2=quantile(I2,probs=.25), q_50_I2=quantile(I2,probs=.5),q_75_I2 = quantile(I2,probs=.75),
+  q_25_r2=quantile(mean_r2,probs=.25), q_50_r2=quantile(mean_r2,probs=.5), q_75_r2 = quantile(mean_r2,probs=.75)
+  ) %>% gt() %>% fmt_number(columns = contains('q_'), decimals = 2) %>% fmt_scientific(columns = ends_with("r2"))
+
+association_summary_table_sig_29
+
+```
+
+## Table S1
+```{r}
+identified %>% group_by(num_country > 1, gender) %>% summarize(n=n(),
+  q_25_or=quantile(exp(abs(beta)),probs=.25), q_50_or=quantile(exp(abs(beta)),probs=.5), q_75_or = quantile(exp(abs(beta)),probs=.75), q_25_I2=quantile(I2,probs=.25), q_50_I2=quantile(I2,probs=.5),q_75_I2 = quantile(I2,probs=.75),
+  q_25_r2=quantile(mean_r2,probs=.25), q_50_r2=quantile(mean_r2,probs=.5), q_75_r2 = quantile(mean_r2,probs=.75)
+  ) %>% gt() %>% fmt_number(columns = contains('q_'), decimals = 2) %>% fmt_scientific(columns = ends_with("r2"))
+
+```
+
+## ECDFs of effect sizes
+```{r, fig.height=9}
+p_ecdf_r2 <- ggplot(identified, aes(mean_r2, color=sig)) 
+p_ecdf_r2 <- p_ecdf_r2 + stat_ecdf() + scale_x_continuous(limits=c(0, .03))
+p_ecdf_r2 <- p_ecdf_r2 + facet_grid(num_country_bin ~ gender, labeller=labeller(gender = c(f = "Female", m = "Male")))
+p_ecdf_r2 <- p_ecdf_r2 + theme(legend.position = 'none') + ylab('Percentile') + xlab('R^2')
+
+
+p_ecdf_or <- ggplot(identified, aes(exp(abs(beta)), color=sig)) 
+p_ecdf_or <- p_ecdf_or + stat_ecdf() + scale_x_log10()
+p_ecdf_or <- p_ecdf_or + facet_grid(num_country_bin ~ gender, labeller=labeller(gender = c(f = "Female", m = "Male")))
+p_ecdf_or <- p_ecdf_or + theme(legend.position = 'none') + ylab('Percentile') + xlab('Odds Ratio (absolute value)')
+
+p_ecdf_i2 <- ggplot(identified %>% filter(num_country > 1), aes(I2, color=sig)) 
+p_ecdf_i2 <- p_ecdf_i2 + stat_ecdf() + scale_colour_discrete(name  ="Identified?")
+p_ecdf_i2 <- p_ecdf_i2 + facet_grid(num_country_bin ~ gender, labeller=labeller(gender = c(f = "Female", m = "Male"))) 
+p_ecdf_i2 <- p_ecdf_i2 + theme(legend.position = 'bottom') + ylab('Percentile') + xlab('I^2')
+
+plot_grid(p_ecdf_r2, p_ecdf_or, p_ecdf_i2, ncol= 1, labels = c('A', 'B', 'C'), rel_heights = c(2,2,2))
+
+
+```
+
+
+## Top Findings
+```{r echo=FALSE, warning=FALSE}
+## how many identified per each bin
+sig_combined_simple <- identified  %>% filter(sig==TRUE) %>% unite(key, name, gender, remove = F)
+
+meta_country_summary <- meta_country_simple_filtered %>% group_by(name, gender) %>% summarize(num_country_2=n(), num_sig_country=sum(pvalue<p_thresh & mean_r2>R2_thresh)) %>% mutate(pct_sig_country=(num_sig_country/num_country_2)*100) %>% ungroup() %>% unite(key, name, gender, remove = T)
+sig_combined_simple <- sig_combined_simple %>% left_join(meta_country_summary, by='key')
+
+identified %>% group_by(gender, sig) %>% tally()
+identified_by_group <- inner_join(
+  identified %>% group_by(gender, sig, num_country_bin) %>% tally() %>% ungroup() %>% filter(sig == T) %>% select(-sig) %>% rename(total_sig=n) %>% unite(key, gender, num_country_bin),
+  identified %>% group_by(gender, sig, num_country_bin) %>% tally() %>% ungroup() %>% filter(sig == F) %>% select(-sig) %>% rename(total=n) %>% unite(key, gender, num_country_bin),
+by="key") %>% separate(key, c("gender", "num_country_bin"), sep="\\_") %>% mutate(pct_sig = total_sig/total)
+
+identified %>% filter(num_country == 29) %>% group_by(gender, sig) %>% tally()
+
+```
+
+# Plot main association size figures
+```{r echo=FALSE, fig.width=11, fig.height=5}
+#### preparing data frames for plotting
+
+plot_panels <- function(filtered_frame_of_assoc, top_n_to_plot=10) {
+  sample_frame <- filtered_frame_of_assoc
+  #sample_frame <- sample_frame %>% arrange(desc(mean_r2)) %>% head(n=top_n_to_plot)
+  sample_frame <- sample_frame %>% arrange(desc(pct_sig_country)) %>% head(n=top_n_to_plot)
+  sample_frame <- sample_frame %>% arrange(desc(pct_sig_country))
+  sample_gender <- sample_frame$gender[1]
+  sample_country_frame <- meta_country_simple_filtered %>% filter(gender == sample_gender, name %in% sample_frame$name)
+  sample_country_frame <- sample_country_frame %>% unite(key, name, gender, remove = F) %>% left_join(sample_frame %>% select(key, pct_sig_country), by='key')
+
+  sample_frame$name <- reorder(sample_frame$name, sample_frame$pct_sig_country)
+  sample_country_frame$name <- reorder(sample_country_frame$name, sample_country_frame$pct_sig_country)
+  sample_frame <- sample_frame %>% unite(labelz, name, var_lbl, lvl_lbl, gender, sep="/", remove = F)
+  sample_country_frame <- sample_country_frame %>% unite(labelz, name,var_lbl, lvl_lbl, gender, sep="/", remove = F)
+  sample_frame$labelz <- reorder(sample_frame$labelz, sample_frame$pct_sig_country)
+  sample_country_frame$labelz <- reorder(sample_country_frame$labelz, sample_country_frame$pct_sig_country)
+
+  p1 <- ggplot(sample_frame, aes(labelz, pct_sig_country))
+  p1 <- p1 + geom_bar(stat='identity') + ylab('Percent of Countries Variable was Identified') + xlab('') + coord_flip()
+  p1 <- p1 + ggtitle('') + theme(plot.title = element_text(size=8), axis.title.x = element_text(size=7)) 
+
+  sample_frame$i2_label <- sprintf('%.1f', sample_frame$I2)
+  p3 <- ggplot(sample_frame, aes(labelz, I2))
+  p3 <- p3 + geom_bar(stat='identity') + geom_text(aes(label=i2_label)) + ylab('I^2') + xlab('') + coord_flip()
+  p3 <- p3 + ggtitle('') + theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(),
+                               plot.title = element_text(size=8), axis.title.x = element_text(size=7)) 
+  
+  p2 <- ggplot(sample_frame, aes(labelz, mean_r2))
+  p2 <- p2 + geom_jitter(data=sample_country_frame, aes(labelz, mean_r2, color=sign(beta))) 
+  p2 <- p2 + geom_point(color='red', size=3) + scale_y_continuous(limits=c(0, 0.08))
+  p2 <- p2 + coord_flip() + xlab('') + ylab("Negelkerke R^2")
+  p2 <- p2 + ggtitle('') + theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(),
+                               legend.position = 'none', 
+                               plot.title = element_text(size=8), axis.title.x = element_text(size=7)) 
+
+  sample_frame$or_label <- sprintf('%.1f', exp(sample_frame$beta))
+  p4 <- ggplot(sample_frame, aes(labelz, exp(beta)))
+  p4 <- p4 + geom_jitter(data=sample_country_frame, aes(labelz, exp(beta), color=sign(beta)), position = position_jitter(seed=1))
+  p4 <- p4 + geom_point(color='red', size=3) 
+  p4 <- p4 + geom_errorbar(aes(ymin=exp(beta-2*se), ymax=exp(beta+2*se)),width=.5)
+  p4 <- p4 + geom_text_repel(aes(label=or_label))
+  p4 <- p4 + scale_y_log10()
+  p4 <- p4 + coord_flip() + xlab('') + ylab('Odds Ratio')
+  p4 <- p4 + ggtitle('') + theme(axis.text.y=element_blank(), 
+                               axis.ticks.y=element_blank(),legend.position = 'none',
+                               plot.title = element_text(size=8), axis.title.x = element_text(size=7))
+  return(list(or=p4, r2=p2, i2=p3, sig=p1))
+}
+
+plot_the_grid <- function(plots) {
+  p <- plot_grid(plots$sig,plots$r2,plots$or,plots$i2, nrow=1, rel_widths = c(2,.5,.5,.25))  
+}
+
+
+plots_low_range_f <- plot_panels(sig_combined_simple %>% filter(gender == 'f', num_country > 2, num_country <= 10),10)
+plots_mid_range_f <- plot_panels(sig_combined_simple %>% filter(gender == 'f', num_country <= 19, num_country > 10),15)
+plots_hi_range_f <- plot_panels(sig_combined_simple %>% filter(gender == 'f', num_country > 19, num_country <= 29), 15)
+plots_29_f <- plot_panels(sig_combined_simple %>% filter(gender == 'f', num_country == 29), 15)
+#plot_the_grid(plots_low_range_f)
+p_mid_f <- plot_the_grid(plots_mid_range_f)
+p_hi_f <- plot_the_grid(plots_hi_range_f)
+p_29_f <- plot_the_grid(plots_29_f)
+
+```
+
+
+# Top Associations for females across 11-19 countries
+```{r echo=FALSE, fig.width=12, fig.height=5}
+p_mid_f
+``` 
+
+# Top Associations for females across 20-29 countries
+```{r, echo=FALSE, fig.width=12, fig.height=5}
+p_hi_f
+```
+
+# Top Associations for females across all 29 countries
+```{r, fig.width=12, fig.height=5}
+p_29_f
+```
+
+```{r echo=FALSE, fig.width=11, fig.height=5}
+plots_low_range_m <- plot_panels(sig_combined_simple %>% filter(gender == 'm', num_country > 5, num_country <= 10),10)
+plots_mid_range_m <- plot_panels(sig_combined_simple %>% filter(gender == 'm', num_country <= 19, num_country > 10),15)
+plots_hi_range_m <- plot_panels(sig_combined_simple %>% filter(gender == 'm', num_country > 19, num_country <= 29), 15)
+plots_29_m <- plot_panels(sig_combined_simple %>% filter(gender == 'm', num_country == 29), 15)
+#plot_the_grid(plots_low_range_f)
+p_mid_m <- plot_the_grid(plots_mid_range_m)
+p_hi_m <- plot_the_grid(plots_hi_range_m)
+p_29_m <- plot_the_grid(plots_29_m)
+
+```
+
+
+# Top Associations for males across 20-29 countries
+```{r, echo=FALSE, fig.width=12, fig.height=5}
+p_hi_m
+```
+
+# Top Associations for males across 11-19 countries
+```{r, echo=FALSE, fig.width=12, fig.height=5}
+p_mid_m
+```
+
+
+# Top Associations for males across all 29 countries
+```{r, echo=FALSE, fig.width=12, fig.height=5}
+p_29_m
+```
+
+
+# Output Tables
+```{r echo=FALSE}
+sig_29_males <- sig_combined_simple %>% filter(gender == 'm', num_country == 29) %>% arrange(desc(pct_sig_country)) %>% select(name, var, var_lbl, lvl_lbl, everything()) %>% select (-c(num_country_2, odds_ratio2, nlp, key, category))
+
+sig_29_females <- sig_combined_simple %>% filter(gender == 'f', num_country == 29) %>% arrange(desc(pct_sig_country)) %>% select(name, var, var_lbl, lvl_lbl, everything()) %>% select (-c(num_country_2, odds_ratio2, nlp, key, category))
+
+## output everything
+write_csv(sig_29_males,path='../dhs_hiv_meta/meta_data/tables_2020/sig_29_males.csv')
+write_csv(sig_29_females,path='../dhs_hiv_meta/meta_data/tables_2020/sig_29_females.csv')
+
+write_csv(identified  %>% filter(gender == 'm') %>% select(name, var, var_lbl, lvl_lbl, everything()) %>% select (-c(odds_ratio2, nlp, key, category)) %>% arrange(desc(num_country, mean_r2)), path='../dhs_hiv_meta/meta_data/tables_2020/table_s3.csv')
+
+write_csv(identified  %>% filter(gender == 'f') %>% select(name, var, var_lbl, lvl_lbl, everything()) %>% select (-c(odds_ratio2, nlp, key, category)) %>% arrange(desc(num_country, mean_r2)), path='../dhs_hiv_meta/meta_data/tables_2020/table_s2.csv')
+
+write_csv(meta_country_simple_filtered  %>% filter(gender == 'm') %>% select(name, var, var_lbl, lvl_lbl, everything()) %>% select (-c(category)) %>% arrange(desc(k, mean_r2)), path='../dhs_hiv_meta/meta_data/tables_2020/table_s4.csv')
+
+write_csv(meta_country_simple_filtered  %>% filter(gender == 'f') %>% select(name, var, var_lbl, lvl_lbl, everything()) %>% select (-c(category)) %>% arrange(desc(k, mean_r2)), path='../dhs_hiv_meta/meta_data/tables_2020/table_s5.csv')
+
+
+```
+
+# Table of Significant Findings in variables across all 29 countries: Males
+```{r}
+datatable(sig_29_males, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T) )
+```
+
+# Table of Significant Findings in variables across all 29 countries: Females
+```{r}
+datatable(sig_29_females, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T) )
+```
+
+# betas of males vs. females
+
+```{r}
+females <- identified %>% filter(gender == 'f', num_country > 1)
+males <- identified %>% filter(gender == 'm', num_country > 1)
+wide_f_m <- females %>% inner_join(males, by='name', suffix=c('_female', '_male'))
+wide_f_m <- wide_f_m %>% mutate(identified_in=case_when(
+  sig_female & sig_male == TRUE ~ "Male+Female",
+  sig_female == TRUE ~ "Female",
+  sig_male == TRUE ~ "Male",
+  TRUE ~ 'Neither'
+))
+p <- ggplot(wide_f_m, aes(exp(beta_female), exp(beta_male)))
+p <- p + geom_point(alpha=0.5) + scale_y_log10(limits=c(0.001, 100)) + scale_x_log10(limits=c(0.001, 100)) + facet_wrap(~identified_in, ncol=2)
+p <- p + xlab('Odds Ratios [female]') + ylab("Odds Ratio [male]") + geom_abline()
+p
+
+wide_f_m %>% group_by(identified_in) %>% summarize(n=n(), cr = cor(beta_female, beta_male))
+
+
+```
+
+
+# Country by country correlation for males
+```{r echo=FALSE, fig.height=12, fig.width=12}
+
+heatmapColors <- function(numColors=16) {
+	c1 <- rainbow(numColors,v=seq(0.5,1,length=numColors),s=seq(1,0.3,length=numColors),start=4/6,end=4.0001/6);
+	c2 <- rainbow(numColors,v=seq(0.5,1,length=numColors),s=seq(1,0.3,length=numColors),start=1/6,end=1.0001/6);
+	c3 <- c(c1,rev(c2)); 
+	return(c3)
+}
+
+vars_in_all_countries <- num_countries_per_var %>% filter(num_country == 29, gender=='m')
+meta_country_all_m <- meta_country_simple_filtered %>% filter(name %in% vars_in_all_countries$name)  %>% filter(gender=='m') %>% select(beta, name, country) 
+meta_country_all_m_wide <- meta_country_all_m %>% spread(name, beta)
+
+meta_country_all_m_wide_matr <- as.matrix(meta_country_all_m_wide[, 2:ncol(meta_country_all_m_wide)])
+rownames(meta_country_all_m_wide_matr) <- meta_country_all_m_wide[,1]
+
+cr_m <- cor(t(meta_country_all_m_wide_matr), use='pairwise.complete.obs', method = 'spearman')
+quantile(abs(cr_m[upper.tri(cr_m)]), probs=c(0.25, 0.5, 0.75))
+heatmap.2(cr_m, trace = 'none', na.rm = F, scale = 'none', symm = T, col=heatmapColors(5), margins=c(16,16), sepwidth=c(.1, .1), symbreaks=T)
+
+```
+
+# Country correlation for females
+```{r echo=FALSE, fig.height=12, fig.width=12}
+vars_in_all_countries <- num_countries_per_var %>% filter(num_country == 29,  gender=='f')
+meta_country_all_f <- meta_country_simple_filtered %>% filter(name %in% vars_in_all_countries$name)  %>% filter(gender=='f') %>% select(beta, name, country) 
+meta_country_all_f_wide <- meta_country_all_f %>% spread(name, beta)
+
+
+meta_country_all_f_wide_matr <- as.matrix(meta_country_all_f_wide[, 2:ncol(meta_country_all_f_wide)])
+rownames(meta_country_all_f_wide_matr) <- meta_country_all_f_wide[,1]
+
+cr_f <- cor(t(meta_country_all_f_wide_matr), use='pairwise.complete.obs', method = 'spearman')
+quantile(abs(cr_f[upper.tri(cr_f)]), probs=c(0.25, 0.5, 0.75))
+
+heatmap.2(cr_f, trace = 'none', na.rm = F, scale = 'none', symm = T, col=heatmapColors(5), margins=c(16,16), sepwidth=c(.1, .1), symbreaks=T)
+```
+# Country correlation of correlations
+```{r, echo=FALSE}
+cr_f <- cr_f[sort(colnames(cr_f)), sort(colnames(cr_f))]
+cr_m <- cr_m[sort(colnames(cr_f)), sort(colnames(cr_f))]
+corrcorr_table <- tibble(correlation_females=cr_f[upper.tri(cr_f)], correlation_males=cr_m[upper.tri(cr_m)])
+cor(corrcorr_table)
+p <- ggplot(corrcorr_table, aes(correlation_females, correlation_males))
+p <- p + geom_point()
+p <- p + geom_abline()
+p
+```
+

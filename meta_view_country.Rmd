@@ -1,0 +1,86 @@
+---
+title: "Within-country meta-analysis summaries"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r echo=FALSE}
+library('tidyverse')
+library('DT')
+```
+
+```{r load data}
+source('0_load_and_filter_rmd.R')
+```
+
+# R-squared within each country
+```{r fig.height=20, fig.width=12}
+p <- ggplot(meta_country_simple_filtered, aes(mean_r2, -log10(pvalue), color=factor(I(-log10(pvalue) > 10 ))))
+p <- p  + geom_point(alpha=.1) +scale_x_continuous(limits=c(0, .2))+ facet_grid(country~gender)
+p <- p + geom_hline(yintercept=10)
+p <- p + theme(legend.position='none')
+p
+```
+
+# ECDF of R2 for each country
+```{r fig.height=20, fig.width=5}
+p <- ggplot(meta_country_simple_filtered, aes(mean_r2,color=factor(I(-log10(pvalue) > 10)) ))
+p <- p + stat_ecdf() + scale_x_continuous(limits=c(0, .05)) + facet_grid(country~gender)
+p <- p + theme(legend.position='bottom')
+p
+```
+
+```{r}
+p <- ggplot(meta_country_simple_filtered %>% filter(!is.na(beta), -log10(pvalue) > 10), aes(mean_r2, -log10(pvalue)))
+p <- p  + geom_point(alpha=.05) + scale_x_continuous(limits=c(0, .2))+ facet_grid(country~gender)
+p
+
+```
+
+```{r}
+
+num_sig_per_country_f <- (meta_country_simple_filtered %>% filter(gender == 'f') %>% split(.$name) %>% map(function(x) {
+  tibble(country=x$country, gender = 'f', sig=x$pvalue<1e-10, mean_r2=x$mean_r2,beta=x$beta)
+}))
+num_sig_per_country_m <- (meta_country_simple_filtered %>% filter(gender == 'm') %>% split(.$name) %>% map(function(x) {
+  tibble(country=x$country, gender = 'm', sig=x$pvalue<1e-10, mean_r2=x$mean_r2,beta=x$beta)
+}))
+
+
+
+num_f <- num_sig_per_country_f %>% map_df(function(x) tibble(nsig=sum(x$sig), npos=sum((x$beta[x$sig]>0)), nneg=sum((x$beta[x$sig]<0)), mean_r2= mean(x$mean_r2), ncountries=nrow(x))) %>% mutate(name=names(num_sig_per_country_f), pct=nsig/ncountries,gender='f')
+
+num_m <- num_sig_per_country_m %>% map_df(function(x) tibble(nsig=sum(x$sig), npos=sum((x$beta[x$sig]>0)), nneg=sum((x$beta[x$sig]<0)), mean_r2= mean(x$mean_r2), ncountries=nrow(x))) %>% mutate(name=names(num_sig_per_country_m), pct=nsig/ncountries,gender='m')
+
+number_found <- rbind(num_f, num_m)
+
+varDesc <- unique(meta_country_simple_filtered [ , c('name', 'var', 'var_lbl', 'lvl_lbl')])
+number_found <- merge(number_found, varDesc, by='name')
+p <- ggplot(number_found, aes(pct)) 
+p <- p + geom_histogram() + facet_wrap(~gender)
+p 
+
+
+```
+
+
+
+
+
+# Output all
+```{r}
+number_found <- number_found %>% arrange(desc(ncountries), desc(pct))
+number_found
+write_csv(number_found , path='./meta_data/number_found_per_variable.csv')
+write_csv(number_found %>% filter(npos > 0, nneg > 0),path='./meta_data/number_opposite_sign_per_variable.csv') 
+```
+
+```{r}
+number_found_females <- number_found %>% filter(gender == 'f') %>% arrange(desc(ncountries), desc(mean_r2)) 
+number_found_males <- number_found %>% filter(gender == 'm') %>% arrange(desc(ncountries), desc(mean_r2)) 
+write_csv(number_found_males , path='./meta_data/number_found_males_per_variable.csv')
+write_csv(number_found_females , path='./meta_data/number_found_females_per_variable.csv')
+```
+
+
