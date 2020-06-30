@@ -1,10 +1,23 @@
 ---
 title: "Meta XWAS of HIV+ across sub-Saharan Africa"
-author: "Chirag Patel and Eran Bendavid"
 date: "06/29/2020"
 output: html_document
 ---
 
+# Github Repo
+- https://github.com/chiragjp/dhs_hiv_meta
+
+# Authors 
+- Chirag J Patel
+    + github: [\@chiragjp](http://github.com/chiragjp)
+    + web: [www.chiragjpgroup.org](www.chiragjpgroup.org)
+- Kajal Claypool
+- Eric Chow
+- Jake Chung
+- Don Mai
+- Jessie Chen
+- Eran Bendavid
+    + email: ebd[at]stanford[dot]edu
 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
