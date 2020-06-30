@@ -1,6 +1,6 @@
 ---
 title: "Meta XWAS of HIV+ across sub-Saharan Africa"
-author: "Chirag Patel"
+author: "Chirag Patel and Eran Bendavid"
 date: "06/29/2020"
 output: html_document
 ---
@@ -35,7 +35,9 @@ meta_combined_simple_filtered <- meta_combined_simple_filtered %>% unite(key, na
 
 ```
 
-# R^2 vs. -log10(pvalue), stratified by country number and gender
+# R^2 vs. -log10(pvalue)
+- stratified by country number and gender
+
 ```{r echo=FALSE}
 ## how many identified per each bin
 R2_thresh <- 0.001 # top 25%
@@ -68,7 +70,7 @@ p <- p + xlab('Odds Ratio Across Surveys') + ylab('-log10(pvalue)')
 p
 ```
 
-# I^2 vs. -log10(pvalue), stratified by survey number and gender
+# I^2 vs. -log10(pvalue)
 ```{r echo=FALSE}
 p <- ggplot(meta_combined_simple_filtered %>% filter(num_country > 1, pvalue < p_thresh,mean_r2 > R2_thresh), aes(mean_r2, I2))
 p <- p + geom_hline(yintercept=50, linetype='dashed')
@@ -231,7 +233,11 @@ p_29_f <- plot_the_grid(plots_29_f)
 ```{r, echo=FALSE, fig.width=12, fig.height=5}
 p_hi_f
 ```
+## Table of females across 20-29 countries in Sub-Saharan Africa
 
+```{r, echo=FALSE}
+datatable(sig_combined_simple %>% filter(gender == 'f', num_country > 19, num_country <= 29) %>% select(name, var_lbl, lvl_lbl, odds_ratio, nlp, I2, mean_r2, num_country, pct_sig_country)) %>% formatRound('odds_ratio', 3) %>% formatRound('nlp', 2) %>% formatRound('I2', 0) %>% formatRound('mean_r2', 5) %>% formatRound('pct_sig_country',0)
+```
 
 ```{r echo=FALSE, fig.width=11, fig.height=5}
 plots_low_range_m <- plot_panels(sig_combined_simple %>% filter(gender == 'm', num_country > 5, num_country <= 10),10)
@@ -251,6 +257,10 @@ p_29_m <- plot_the_grid(plots_29_m)
 p_hi_m
 ```
 
+## Table of males across 20-29 countries in Sub-Saharan Africa
+```{r, echo=FALSE}
+datatable(sig_combined_simple %>% filter(gender == 'm', num_country > 19, num_country <= 29) %>% select(name, var_lbl, lvl_lbl, odds_ratio, nlp, I2, mean_r2, num_country,pct_sig_country)) %>% formatRound('odds_ratio', 3) %>% formatRound('nlp', 2) %>% formatRound('I2', 0) %>% formatRound('mean_r2', 5) %>% formatRound('pct_sig_country',0)
+```
 
 # Concordance of Odds Ratios of males vs. females across Sub-Saharan Africa
 - comparing the associations across countries by correlating their odds ratios in males versus females
@@ -317,19 +327,5 @@ cr_f <- cor(t(meta_country_all_f_wide_matr), use='pairwise.complete.obs', method
 quantile(abs(cr_f[upper.tri(cr_f)]), probs=c(0.25, 0.5, 0.75))
 
 heatmap.2(cr_f, trace = 'none', na.rm = F, scale = 'none', symm = T, col=heatmapColors(5), margins=c(16,16), sepwidth=c(.1, .1), symbreaks=T)
-```
-
-# Country-by-country correlation of correlations
-- males vs. females
-
-```{r, echo=FALSE}
-cr_f <- cr_f[sort(colnames(cr_f)), sort(colnames(cr_f))]
-cr_m <- cr_m[sort(colnames(cr_f)), sort(colnames(cr_f))]
-corrcorr_table <- tibble(correlation_females=cr_f[upper.tri(cr_f)], correlation_males=cr_m[upper.tri(cr_m)])
-cor(corrcorr_table)
-p <- ggplot(corrcorr_table, aes(correlation_females, correlation_males))
-p <- p + geom_point()
-p <- p + geom_abline()
-ggplotly(p)
 ```
 
