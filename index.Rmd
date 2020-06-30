@@ -22,7 +22,7 @@ load('./meta_data/meta_filtered_data.Rdata')
 
 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, include=FALSE}
 num_countries_per_var <- meta_country_simple_filtered %>% group_by( name, gender) %>% summarize(num_country=n()) %>% ungroup()
 #number_of_associations_country <- meta_country_simple_filtered %>% group_by(k, country, gender) %>% summarize(n=n())
 quantile(num_countries_per_var$num_country[num_countries_per_var$gender == 'm'], probs=c(.5, .75, .8, .9, .95, .975, .99))
@@ -136,7 +136,8 @@ plot_grid(p_ecdf_r2, p_ecdf_or, p_ecdf_i2, ncol= 1, labels = c('A', 'B', 'C'), r
 ```
 
 
-## Top Findings
+# Identified Associations 
+
 ```{r echo=FALSE, warning=FALSE}
 ## how many identified per each bin
 sig_combined_simple <- identified  %>% filter(sig==TRUE) %>% unite(key, name, gender, remove = F)
@@ -154,7 +155,7 @@ by="key") %>% separate(key, c("gender", "num_country_bin"), sep="\\_") %>% mutat
 
 ```
 
-# Plot main association size figures
+
 ```{r echo=FALSE, fig.width=11, fig.height=5}
 #### preparing data frames for plotting
 
@@ -223,7 +224,7 @@ p_29_f <- plot_the_grid(plots_29_f)
 ```
 
 
-# Top Associations for females across 20-29 countries
+# Top Associations for females across 20-29 countries in Sub-Saharan Africa
 ```{r, echo=FALSE, fig.width=12, fig.height=5}
 p_hi_f
 ```
@@ -242,13 +243,14 @@ p_29_m <- plot_the_grid(plots_29_m)
 ```
 
 
-# Top Associations for males across 20-29 countries
+# Top Associations for males across 20-29 countries in Sub-Saharan Africa
 ```{r, echo=FALSE, fig.width=12, fig.height=5}
 p_hi_m
 ```
 
 
-# betas of males vs. females
+# Concordance of Odds Ratios of males vs. females across Sub-Saharan Africa
+
 
 ```{r, echo=FALSE}
 females <- identified %>% filter(gender == 'f', num_country > 1)
@@ -293,7 +295,7 @@ heatmap.2(cr_m, trace = 'none', na.rm = F, scale = 'none', symm = T, col=heatmap
 
 ```
 
-# Country correlation for females
+# Country by country correlation for females
 ```{r echo=FALSE, fig.height=12, fig.width=12}
 vars_in_all_countries <- num_countries_per_var %>% filter(num_country == 29,  gender=='f')
 meta_country_all_f <- meta_country_simple_filtered %>% filter(name %in% vars_in_all_countries$name)  %>% filter(gender=='f') %>% select(beta, name, country) 
@@ -309,7 +311,7 @@ quantile(abs(cr_f[upper.tri(cr_f)]), probs=c(0.25, 0.5, 0.75))
 heatmap.2(cr_f, trace = 'none', na.rm = F, scale = 'none', symm = T, col=heatmapColors(5), margins=c(16,16), sepwidth=c(.1, .1), symbreaks=T)
 ```
 
-# Country correlation of correlations
+# Country-by-country correlation of correlations
 ```{r, echo=FALSE}
 cr_f <- cr_f[sort(colnames(cr_f)), sort(colnames(cr_f))]
 cr_m <- cr_m[sort(colnames(cr_f)), sort(colnames(cr_f))]
