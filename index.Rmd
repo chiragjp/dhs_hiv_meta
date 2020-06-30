@@ -80,11 +80,12 @@ p
 
 
 
-# Summary Tables
+# Describing the distribution of the associations
+## Summary Tables
 ```{r echo=FALSE}
 identified <- meta_combined_simple_filtered %>% mutate(sig=(pvalue < p_thresh) & (mean_r2 >= R2_thresh))
-identified %>% filter(sig == T) %>% group_by(gender) %>% tally()
-identified %>% filter(sig == T) %>% group_by(sig, gender, num_country_bin) %>% tally()
+#identified %>% filter(sig == T) %>% group_by(gender) %>% tally()
+#identified %>% filter(sig == T) %>% group_by(sig, gender, num_country_bin) %>% tally()
 
 association_summary_table <- identified %>% group_by(num_country_bin, gender) %>% summarize(n=n(),
   q_25_or=quantile(exp(abs(beta)),probs=.25), q_50_or=quantile(exp(abs(beta)),probs=.5), q_75_or = quantile(exp(abs(beta)),probs=.75), q_25_I2=quantile(I2,probs=.25), q_50_I2=quantile(I2,probs=.5),q_75_I2 = quantile(I2,probs=.75),
@@ -137,6 +138,8 @@ plot_grid(p_ecdf_r2, p_ecdf_or, p_ecdf_i2, ncol= 1, labels = c('A', 'B', 'C'), r
 
 
 # Identified Associations 
+- R2 > 0.001 and p-value < 1e-6
+- SIG==TRUE 
 
 ```{r echo=FALSE, warning=FALSE}
 ## how many identified per each bin
@@ -145,14 +148,14 @@ sig_combined_simple <- identified  %>% filter(sig==TRUE) %>% unite(key, name, ge
 meta_country_summary <- meta_country_simple_filtered %>% group_by(name, gender) %>% summarize(num_country_2=n(), num_sig_country=sum(pvalue<p_thresh & mean_r2>R2_thresh)) %>% mutate(pct_sig_country=(num_sig_country/num_country_2)*100) %>% ungroup() %>% unite(key, name, gender, remove = T)
 sig_combined_simple <- sig_combined_simple %>% left_join(meta_country_summary, by='key')
 
-identified %>% group_by(gender, sig) %>% tally()
+
 identified_by_group <- inner_join(
   identified %>% group_by(gender, sig, num_country_bin) %>% tally() %>% ungroup() %>% filter(sig == T) %>% select(-sig) %>% rename(total_sig=n) %>% unite(key, gender, num_country_bin),
   identified %>% group_by(gender, sig, num_country_bin) %>% tally() %>% ungroup() %>% filter(sig == F) %>% select(-sig) %>% rename(total=n) %>% unite(key, gender, num_country_bin),
 by="key") %>% separate(key, c("gender", "num_country_bin"), sep="\\_") %>% mutate(pct_sig = total_sig/total)
 
-#identified %>% filter(num_country == 29) %>% group_by(gender, sig) %>% tally()
-
+#identified %>% filter(num_country == 29) %>% group_by(gender, sig) %>% tally() %>% gt()
+identified %>% group_by(gender, sig) %>% tally() %>% gt()
 ```
 
 
@@ -250,7 +253,10 @@ p_hi_m
 
 
 # Concordance of Odds Ratios of males vs. females across Sub-Saharan Africa
-
+- comparing the associations across countries by correlating their odds ratios in males versus females
+- association has to occur in at least 2 countries
+- Those labeled "Female" are identified in females (and not in males); those labeled with "Male" are those identified in males
+- Those labeled "Male+Female" are identified in both males and females
 
 ```{r, echo=FALSE}
 females <- identified %>% filter(gender == 'f', num_country > 1)
@@ -273,6 +279,8 @@ ggplotly(p)
 
 
 # Country by country correlation for males
+- correlate the associations that are assessed in all 29 countries between each of the countries
+
 ```{r echo=FALSE, fig.height=12, fig.width=12}
 
 heatmapColors <- function(numColors=16) {
@@ -312,6 +320,8 @@ heatmap.2(cr_f, trace = 'none', na.rm = F, scale = 'none', symm = T, col=heatmap
 ```
 
 # Country-by-country correlation of correlations
+- males vs. females
+
 ```{r, echo=FALSE}
 cr_f <- cr_f[sort(colnames(cr_f)), sort(colnames(cr_f))]
 cr_m <- cr_m[sort(colnames(cr_f)), sort(colnames(cr_f))]
