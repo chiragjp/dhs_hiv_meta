@@ -1,7 +1,7 @@
 ---
 title: "Meta XWAS of HIV+ across sub-Saharan Africa"
 date: "06/29/2020"
-output: html_document
+output: bookdown::html_document2
 ---
 
 
@@ -49,10 +49,9 @@ meta_combined_simple_filtered <- meta_combined_simple_filtered %>% unite(key, na
 
 ```
 
-# R^2 vs. -log10(pvalue)
-- stratified by country number and gender
-
-```{r echo=FALSE}
+# Meta-analytic associations
+## Nagelkerke R2 vs. -log10(pvalue)
+```{r echo=FALSE, fig.cap="-log10(pvalue) versus Nagelkerke R2. Each point is an average of the Nagelkerke R2 over a number of countries and the p-value is the meta-analytic association pvalue. Associations are stratified by the number of countries for comparison. Horizontal dotted line represents the Bonferroni level of significance. Vertical line represents the R2 threshold of 0.001."}
 ## how many identified per each bin
 R2_thresh <- 0.001 # top 25%
 p_thresh <- 1e-6
@@ -68,8 +67,8 @@ p <- p + xlab('Average R^2 Across Surveys') + ylab('-log10(pvalue)')
 p
 ```
 
-# Odds Ratio vs. -log10(pvalue)
-```{r echo=FALSE}
+## Odds Ratio vs. -log10(pvalue)
+```{r echo=FALSE, fig.cap="-log10(pvalue) versus odds ratio. Each point is an meta-analytic odds ratio over a number of countries and the p-value is the meta-analytic association pvalue. Associations are stratified by the number of countries for comparison. Dotted line represents the Bonferroni level of significance."}
 meta_combined_simple_filtered <- meta_combined_simple_filtered %>% mutate(odds_ratio=exp(beta))
 meta_combined_simple_filtered <- meta_combined_simple_filtered %>% mutate(odds_ratio2=case_when
                                                                           (odds_ratio > 100 ~ 100,
@@ -84,8 +83,8 @@ p <- p + xlab('Odds Ratio Across Surveys') + ylab('-log10(pvalue)')
 p
 ```
 
-# I^2 vs. -log10(pvalue)
-```{r echo=FALSE}
+## Inter-survey heterogeneity of identified associations
+```{r echo=FALSE, fig.cap="I2 vs. -log10(meta analytic pvalue); dotted line represents 50% I2"}
 p <- ggplot(meta_combined_simple_filtered %>% filter(num_country > 1, pvalue < p_thresh,mean_r2 > R2_thresh), aes(mean_r2, I2))
 p <- p + geom_hline(yintercept=50, linetype='dashed')
 p <- p + geom_point(alpha=0.7) + scale_x_continuous(limits=c(0, .02)) +facet_grid(num_country_bin ~ gender) 
@@ -244,16 +243,19 @@ p_29_f <- plot_the_grid(plots_29_f)
 
 
 # Top Associations for females across 20-29 countries in Sub-Saharan Africa
-```{r, echo=FALSE, fig.width=12, fig.height=5}
+
+```{r, echo=FALSE, fig.width=12, fig.height=5, fig.cap='Left most panel is the variable name and code name, 2nd panel from left is the percent of countries variable was identified, 3rd panel from left is the Nagelkerke R2 per country (red dot is the average; blue points are countries with OR > 1, dark blue are countries with OR < 1), 4th  panel shows the odds ratios (overall meta-analytic estimate in the red dot), and 5th panel shows the I2 (heterogeneity).'}
 p_hi_f
 ```
 ## Table of females across 20-29 countries in Sub-Saharan Africa
+- num_country denotes the number of countries (max of 29) for the association; pct_sig_country includes the number of countries identified (pvalue < 1e-6 and R2 > 0.001)
+- nlp denotes -log10(pvalue)
 
 ```{r, echo=FALSE}
 datatable(sig_combined_simple %>% filter(gender == 'f', num_country > 19, num_country <= 29) %>% select(name, var_lbl, lvl_lbl, odds_ratio, nlp, I2, mean_r2, num_country, pct_sig_country)) %>% formatRound('odds_ratio', 3) %>% formatRound('nlp', 2) %>% formatRound('I2', 0) %>% formatRound('mean_r2', 5) %>% formatRound('pct_sig_country',0)
 ```
 
-```{r echo=FALSE, fig.width=11, fig.height=5}
+```{r echo=FALSE, fig.width=11, fig.height=5, fig.cap='Left most panel is the variable name and code name, 2nd panel from left is the percent of countries variable was identified, 3rd panel from left is the Nagelkerke R2 per country (red dot is the average; blue points are countries with OR > 1, dark blue are countries with OR < 1), 4th  panel shows the odds ratios (overall meta-analytic estimate in the red dot), and 5th panel shows the I2 (heterogeneity).'}
 plots_low_range_m <- plot_panels(sig_combined_simple %>% filter(gender == 'm', num_country > 5, num_country <= 10),10)
 plots_mid_range_m <- plot_panels(sig_combined_simple %>% filter(gender == 'm', num_country <= 19, num_country > 10),15)
 plots_hi_range_m <- plot_panels(sig_combined_simple %>% filter(gender == 'm', num_country > 19, num_country <= 29), 15)
@@ -282,7 +284,7 @@ datatable(sig_combined_simple %>% filter(gender == 'm', num_country > 19, num_co
 - Those labeled "Female" are identified in females (and not in males); those labeled with "Male" are those identified in males
 - Those labeled "Male+Female" are identified in both males and females
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, fig.cap="Correlation of odds ratios in females vs. males"}
 females <- identified %>% filter(gender == 'f', num_country > 1)
 males <- identified %>% filter(gender == 'm', num_country > 1)
 wide_f_m <- females %>% inner_join(males, by='name', suffix=c('_female', '_male'))
@@ -305,7 +307,7 @@ ggplotly(p)
 # Country by country correlation for males
 - correlate the associations that are assessed in all 29 countries between each of the countries
 
-```{r echo=FALSE, fig.height=12, fig.width=12}
+```{r echo=FALSE, fig.height=12, fig.width=12, fig.cap="Pairwise correlations between associations from each country (in males)"}
 
 heatmapColors <- function(numColors=16) {
 	c1 <- rainbow(numColors,v=seq(0.5,1,length=numColors),s=seq(1,0.3,length=numColors),start=4/6,end=4.0001/6);
@@ -328,7 +330,7 @@ heatmap.2(cr_m, trace = 'none', na.rm = F, scale = 'none', symm = T, col=heatmap
 ```
 
 # Country by country correlation for females
-```{r echo=FALSE, fig.height=12, fig.width=12}
+```{r echo=FALSE, fig.height=12, fig.width=12, fig.cap="Pairwise correlations between associations from each country (in males)"}
 vars_in_all_countries <- num_countries_per_var %>% filter(num_country == 29,  gender=='f')
 meta_country_all_f <- meta_country_simple_filtered %>% filter(name %in% vars_in_all_countries$name)  %>% filter(gender=='f') %>% select(beta, name, country) 
 meta_country_all_f_wide <- meta_country_all_f %>% spread(name, beta)
