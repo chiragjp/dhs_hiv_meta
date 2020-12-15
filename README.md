@@ -37,7 +37,7 @@
 - A browsable synposis of our findings can be found here: <a href='https://www.chiragjpgroup.org/dhs_hiv_meta/'>chiragjpgroup.org/dhs_hiv_meta/</a> 
 
 ## Online Supplementary Tables:
-For full transparency and to enhance reuse and reproducibility, we have placed all of our summary statistics, including the meta-analytic OR, R2, and I2, their standard errors, and p-values in a Excel file located here: <a href="https://github.com/chiragjp/dhs_hiv_meta/tree/master/meta_data/Online Supplementary Tables.xls">Online Supplementary Tables</a>
+For full transparency and to enhance reuse and reproducibility, we have placed all of our summary statistics, including the meta-analytic OR, R2, and I2, their standard errors, and p-values in a Excel file located here: <a href="https://github.com/chiragjp/dhs_hiv_meta/blob/master/meta_data/Online%20Supplementary%20Tables.xlsx?raw=true">Online Supplementary Tables</a>
 
 Online Table S1. Distributions of odds ratios, Nagelkerke R2, and I2 (heterogeneity) estimates for variables appearing in 1 country and at least 2 countries.
 Online Table S2. Summary statistics (meta-analytic OR, Nagelkerke R2, and I2) for females across all surveys
