@@ -15,7 +15,7 @@ library(ggrepel)
 library(DT)
 library(gt)
 library(gplots)
-library(cowplot)
+
 load('./meta_data/meta_filtered_data.Rdata')
 ```
 # How many variables interrogated?
@@ -118,6 +118,7 @@ p
 ## Table 2
 ```{r}
 identified <- meta_combined_simple_filtered %>% mutate(sig=(pvalue < p_thresh) & (mean_r2 >= R2_thresh))
+meta_country_simple_filtered <- meta_country_simple_filtered %>% mutate(sig_country=(pvalue < p_thresh) & mean_r2 >= R2_thresh)
 identified %>% filter(sig == T) %>% group_by(gender) %>% tally()
 identified %>% filter(sig == T) %>% group_by(sig, gender, num_country_bin) %>% tally()
 
@@ -235,9 +236,10 @@ plot_panels <- function(filtered_frame_of_assoc, top_n_to_plot=10) {
                                legend.position = 'none', 
                                plot.title = element_text(size=8), axis.title.x = element_text(size=7)) 
 
-  sample_frame$or_label <- sprintf('%.1f', exp(sample_frame$beta))
+  sample_frame$or_label <- sprintf('%.2f', exp(sample_frame$beta))
   p4 <- ggplot(sample_frame, aes(labelz, exp(beta)))
-  p4 <- p4 + geom_jitter(data=sample_country_frame, aes(labelz, exp(beta), color=sign(beta)), position = position_jitter(seed=1))
+  p4 <- p4 + geom_jitter(data=sample_country_frame, aes(labelz, exp(beta), color=sign(beta), shape=factor(sig_country)), position = position_jitter(seed=1)) + scale_shape_manual(values=c(21,19))
+  
   p4 <- p4 + geom_point(color='red', size=3) 
   p4 <- p4 + geom_errorbar(aes(ymin=exp(beta-2*se), ymax=exp(beta+2*se)),width=.5)
   p4 <- p4 + geom_text_repel(aes(label=or_label))
@@ -384,7 +386,7 @@ rownames(meta_country_all_m_wide_matr) <- meta_country_all_m_wide[,1]
 
 cr_m <- cor(t(meta_country_all_m_wide_matr), use='pairwise.complete.obs', method = 'spearman')
 quantile(abs(cr_m[upper.tri(cr_m)]), probs=c(0.25, 0.5, 0.75))
-heatmap.2(cr_m, trace = 'none', na.rm = F, scale = 'none', symm = T, col=heatmapColors(5), margins=c(16,16), sepwidth=c(.1, .1), symbreaks=T)
+heatmap.2(cr_m, trace = 'none', na.rm = F, scale = 'none', symm = T, col=heatmapColors(5), margins=c(16,16), sepwidth=c(.1, .1), symbreaks=T, dendrogram = 'none')
 
 ```
 
@@ -401,7 +403,7 @@ rownames(meta_country_all_f_wide_matr) <- meta_country_all_f_wide[,1]
 cr_f <- cor(t(meta_country_all_f_wide_matr), use='pairwise.complete.obs', method = 'spearman')
 quantile(abs(cr_f[upper.tri(cr_f)]), probs=c(0.25, 0.5, 0.75))
 
-heatmap.2(cr_f, trace = 'none', na.rm = F, scale = 'none', symm = T, col=heatmapColors(5), margins=c(16,16), sepwidth=c(.1, .1), symbreaks=T)
+heatmap.2(cr_f, trace = 'none', na.rm = F, scale = 'none', symm = T, col=heatmapColors(5), margins=c(16,16), sepwidth=c(.1, .1), symbreaks=T, dendrogram = 'none')
 ```
 # Country correlation of correlations
 ```{r, echo=FALSE}

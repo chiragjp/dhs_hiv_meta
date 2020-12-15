@@ -1,0 +1,69 @@
+---
+title: "Gini of predicted probabilties and the prevalence"
+output:
+  html_document:
+    df_print: paged
+---
+
+
+```{r}
+library(tidyverse)
+library(ineq)
+pp_files <- dir('./predictedProbabilities/')
+pp <- pp_files %>% map(~read_csv(file.path('./predictedProbabilities/', .)))
+
+country_sex <- str_split(pp_files, "\\.") %>% map(function(arr) {return (arr[[1]])}) %>% unlist()
+country1 <- str_split(country_sex, "\\_") %>% map(function(arr) {return (arr[[1]])}) %>% unlist()
+sex <- str_split(country_sex, "\\_") %>% map(function(arr) {return (arr[[length(arr)]])}) %>% unlist()
+file_characteristics <- tibble(country=country1, sex=sex, country_survey_sex=country_sex)
+file_characteristics[grep('Congo_Democratic_Republic', file_characteristics$country_survey_sex ), 'country'] <- 'Congo_Democratic_Republic'
+file_characteristics[grep('Sao_Tome_and_Principe', file_characteristics$country_survey_sex ), 'country'] <- 'Sao_Tome_and_Principe'
+file_characteristics[grep('Sierra_Leone', file_characteristics$country_survey_sex ), 'country'] <- 'Sierra_Leone'
+file_characteristics[grep('Cote_d\'Ivoire', file_characteristics$country_survey_sex ), 'country'] <- 'Cote_d\'Ivoire'
+file_characteristics[grep('Burkina_Faso', file_characteristics$country_survey_sex ), 'country'] <- 'Burkina_Faso'
+
+file_characteristics[grep('Swaziland', file_characteristics$country_survey_sex ), 'country'] <- 'eSwatini'
+
+```
+
+```{r}
+prevalences <- read_csv('./summary_stats/characteristics.csv')
+```
+
+```{r}
+ginis <- vector(mode='numeric', length=length(pp))
+for(ii in 1:length(pp)) {
+  ginis[ii] <- ineq(pp[[ii]]$hivPredProb,type="Gini")  
+}
+gini_per_survey <- file_characteristics %>% mutate(gini=ginis)
+gini_per_country <- gini_per_survey %>% group_by(country, sex) %>% summarize(gini_coef=mean(gini))
+# merge with prevalences
+prevalences_long <- prevalences %>% select(country, hiv_female, hiv_male) %>% pivot_longer(cols=2:3) %>% rename(sex=name, prevalence=value) %>% mutate(sex=ifelse(sex == 'hiv_female', 'f', 'm'))
+
+gini_per_country <- gini_per_country %>% left_join(prevalences_long)
+```
+
+
+```{r fig.width=6, fig.height=5}
+p1 <- ggplot(gini_per_country, aes(country, gini_coef, color=sex))
+p1 <- p1 + geom_bar(stat='identity', position='dodge') + coord_flip() + ylab('Gini Coef. of Predicted Probability') 
+p1 <- p1 + theme(legend.position="none")
+p1
+```
+
+
+# prevalence vs. gini
+```{r}
+library(ggrepel)
+gini_per_country <- gini_per_country %>% mutate(plot_label = paste(country, " (", sex, ")", sep=""))
+p2 <- ggplot(gini_per_country, aes(prevalence,  gini_coef, color=sex, label=plot_label))
+p2 <- p2 + geom_point(stat='identity', position='dodge') + xlab('HIV+ Prevalence') + ylab("Gini Coef. of Predicted Probability")
+p2 <- p2 + geom_text_repel(size=3) + theme(legend.position="none")
+p2
+```
+
+```{r, fig.width=12, fig.height=5}
+library(cowplot)
+pg <- plot_grid(p1, p2, labels="AUTO")
+pg
+```
