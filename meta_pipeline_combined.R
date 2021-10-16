@@ -5,7 +5,8 @@
 library('tidyverse')
 library('metafor')
 library('DT')
-load('./meta_data/hiv_summary_stats_combined_032419.Rdata') ## see directory_traverse.R
+#load('./meta_data/hiv_summary_stats_combined_032419.Rdata') ## see directory_traverse.R
+load("./meta_data/hiv_summary_stats_multivariate_100821.Rdata")
 
 
 hiv$year <- unlist(lapply(strsplit(hiv$survey, "\\_"), function(x) { x[3] }))
@@ -42,9 +43,9 @@ meta_combined$num_surveys <- cut(meta_combined$k, breaks=c(0,1,3,10,50))
 meta_combined_simple <- meta_combined %>% select(-c(data,model))
 
 
-write_csv(meta_combined_simple, path='./meta_data/meta_combined_simple.csv')
+write_csv(meta_combined_simple, file='./meta_data/meta_combined_mv_adjusted_simple.csv')
 
-save(meta_combined_simple,meta_combined, file='./meta_data/meta_combined.Rdata')
+save(meta_combined_simple,meta_combined, file='./meta_data/meta_mv_adjusted_combined.Rdata')
 
 
 

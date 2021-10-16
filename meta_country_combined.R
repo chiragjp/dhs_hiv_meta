@@ -5,8 +5,8 @@
 library('tidyverse')
 library('metafor')
 library('DT')
-load('./meta_data/hiv_summary_stats_combined_032419.Rdata') ## see directory_traverse_test_train_combined.R
-
+#load('./meta_data/hiv_summary_stats_combined_032419.Rdata') ## see directory_traverse_test_train_combined.R
+load("./meta_data/hiv_summary_stats_multivariate_100821.Rdata")
 
 hiv$year <- unlist(lapply(strsplit(hiv$survey, "\\_"), function(x) { x[3] }))
 meta_for_one <- function(estimates, ses, ...) {
@@ -40,5 +40,5 @@ meta_country <- meta_country %>% mutate(mean_r2=map_dbl(data, ~mean(.x$Nag.r2, n
 cat('writing out files...\n')
 
 meta_country_simple <- meta_country %>% select(-c(data, model))
-save(meta_country, meta_country_simple, file='./meta_data/meta_combined_country.Rdata')
-save(meta_country_simple, file='./meta_data/meta_country_simple.Rdata')
+save(meta_country, meta_country_simple, file='./meta_data/meta_mv_adjusted_combined_country.Rdata')
+save(meta_country_simple, file='./meta_data/meta_mv_adjusted_country_simple.Rdata')

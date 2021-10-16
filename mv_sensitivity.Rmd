@@ -1,0 +1,99 @@
+---
+title: "Sensitivity Analysis for Meta-XWAS in HIV"
+author: "Chirag Patel"
+date: "10/08/2021"
+output: html_document
+---
+
+ - multivariate models: 
+ - age, type of residence (urban vs rural),  and wealth index (5 levels)
+
+Males
+- type of residence (urban/rural = hv025)
+- age = mv012
+- wealth index = v190 (5 factor variable)
+Females:
+- age = v012
+- type of residence and wealth index were the same.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(gplots)
+library(cowplot)
+library(tidyverse)
+R2_thresh <- 0.001 # top 25%
+p_thresh <- 1e-6
+
+load('./meta_data/meta_mv_adjusted_combined.Rdata')
+load('./meta_data/meta_mv_adjusted_country_simple.Rdata')
+meta_combined_mv_simple <- meta_combined_simple
+meta_country_mv_simple <- meta_country_simple
+remove(meta_combined, meta_combined_simple, meta_country_simple)
+load('./meta_data/meta_filtered_data.Rdata')
+meta_combined_simple_filtered$num_surveys <- cut(meta_combined_simple_filtered$k, breaks=c(0,1,10,20,30,40, 50))
+meta_combined_simple_filtered <- meta_combined_simple_filtered %>% mutate(sig=(pvalue < p_thresh) & (mean_r2 >= R2_thresh))
+
+
+```
+
+
+```{r num countries}
+num_countries_per_var <- meta_country_simple_filtered %>% group_by( name, gender) %>% summarize(num_country=n()) %>% ungroup()
+#number_of_associations_country <- meta_country_simple_filtered %>% group_by(k, country, gender) %>% summarize(n=n())
+quantile(num_countries_per_var$num_country[num_countries_per_var$gender == 'm'], probs=c(.5, .75, .8, .9, .95, .975, .99))
+quantile(num_countries_per_var$num_country[num_countries_per_var$gender == 'f'], probs=c(.5, .75, .8, .9, .95, .975, .99))
+num_countries_per_var_to_merge <- num_countries_per_var %>% mutate(num_country_bin = cut(num_country, breaks=c(0,1,10,20,30))) %>% unite(key, name, gender)
+
+#meta_combined_simple_filtered$num_surveys <- cut(meta_combined_simple_filtered$k, breaks=c(0,1,5,10,15,20,25,30, 35,40, 45, 50))
+meta_combined_simple_filtered$num_surveys <- cut(meta_combined_simple_filtered$k, breaks=c(0,1,10,20,30,40, 50))
+meta_combined_simple_filtered <- meta_combined_simple_filtered %>% unite(key, name, gender, remove = F) %>% left_join(num_countries_per_var_to_merge)
+
+```
+
+
+```{r merge mv adjusted data}
+meta_combined_simple_u_mv <- meta_combined_simple_filtered %>% left_join(meta_combined_mv_simple %>% select(name, gender, beta, se, pvalue), suffix=c("", "_mv"), by=c('name'='name', 'gender'='gender'))
+meta_combined_simple_u_mv <- meta_combined_simple_u_mv %>% mutate(pct_diff = (((beta_mv)-(beta)) / (beta))*100) %>% mutate(pct_diff_gt_25 = abs(pct_diff) > 25)
+meta_combined_simple_u_mv <- meta_combined_simple_u_mv %>% mutate(sig_mv = pvalue_mv >= p_thresh)
+```
+
+```{r}
+meta_combined_simple_u_mv %>% filter(num_country > 10) %>% group_by(sig, sig_mv, pct_diff_gt_25, num_country_bin) %>% count()
+```
+
+```{r plot of betas}
+
+
+
+p <- ggplot(meta_combined_simple_u_mv %>% filter(sig==T, num_country > 10), aes(exp(beta), exp(beta_mv)))
+p <- p + geom_point(pch=1) + facet_grid(gender ~ num_country_bin) + scale_x_log10(limits=c(-.7, 1.4)) + scale_y_log10(limits=c(-.7, 1.4))  + geom_abline()
+p
+
+
+p <- ggplot(meta_combined_simple_u_mv %>% filter(sig==T, num_country > 10), aes( pct_diff ))
+p <- p + geom_histogram() + facet_grid(gender ~ num_country_bin) + xlab('% change in coefficient')
+p
+
+
+
+```
+
+# write out .csvs
+```{r}
+
+#write_csv(meta_combined_simple_u_mv  %>% filter(sig==TRUE, gender=='f', num_country_bin == '(20,30]') %>% arrange(-mean_r2,log10(pvalue)) %>% select(var, var_lbl, num_country, pvalue, pvalue_mv, mean_r2, beta, beta_mv, pct_diff) %>% mutate(or=exp(beta), or_mv=exp(beta_mv)), file='f_20_30.csv')
+
+#write_csv(meta_combined_simple_u_mv  %>% filter(sig==TRUE, gender=='m', num_country_bin == '(20,30]') %>% arrange(-mean_r2,log10(pvalue)) %>% select(var, var_lbl, num_country, pvalue, pvalue_mv, mean_r2, beta, beta_mv, pct_diff) %>% mutate(or=exp(beta), or_mv=exp(beta_mv)), file='m_20_30.csv')
+
+#write_csv(meta_combined_simple_u_mv  %>% filter(sig==TRUE, gender=='f', num_country_bin == '(10,20]') %>% arrange(-mean_r2,log10(pvalue)) %>% select(var, var_lbl, num_country, pvalue, pvalue_mv, mean_r2, beta, beta_mv, pct_diff) %>% mutate(or=exp(beta), or_mv=exp(beta_mv)), file='f_10_20.csv')
+
+#write_csv(meta_combined_simple_u_mv  %>% filter(sig==TRUE, gender=='m', num_country_bin == '(10,20]') %>% arrange(-mean_r2,log10(pvalue)) %>% select(var, var_lbl, num_country, pvalue, pvalue_mv, mean_r2, beta, beta_mv, pct_diff) %>% mutate(or=exp(beta), or_mv=exp(beta_mv)), file='m_10_20.csv')
+
+write_csv(meta_combined_simple_u_mv  %>% filter(sig==TRUE, gender=='m', num_country_bin == '(10,20]') %>% arrange(-mean_r2,log10(pvalue)) %>% select(var, var_lbl, num_country, pvalue, pvalue_mv, mean_r2, beta, beta_mv, pct_diff) %>% mutate(or=exp(beta), or_mv=exp(beta_mv)), file='m_10_20.csv')
+
+head(meta_combined_simple_u_mv)
+
+write_csv(meta_combined_simple_u_mv  %>% filter(sig==TRUE, gender=='m', k > 10) %>% arrange(-mean_r2,log10(pvalue)) %>% select(var, var_lbl, num_country, pvalue, pvalue_mv, mean_r2, beta, beta_mv, pct_diff) %>% mutate(or=exp(beta), or_mv=exp(beta_mv)), file='males_mv.csv')
+
+write_csv(meta_combined_simple_u_mv  %>% filter(sig==TRUE, gender=='f', k > 10) %>% arrange(-mean_r2,log10(pvalue)) %>% select(var, var_lbl, num_country, pvalue, pvalue_mv, mean_r2, beta, beta_mv, pct_diff) %>% mutate(or=exp(beta), or_mv=exp(beta_mv)), file='females_mv.csv')
+
+```
