@@ -44,10 +44,28 @@ gini_per_country <- gini_per_country %>% left_join(prevalences_long)
 ```
 
 
+```{r output sample size}
+
+cases <- vector(mode='numeric', length=length(pp))
+controls <- vector(mode='numeric', length=length(pp))
+for(ii in 1:length(pp)) {
+  cases[ii] <- sum(pp[[ii]]$hiv03)
+  controls[ii] <- sum(pp[[ii]]$hiv03==0)
+}
+
+sample_size_per_survey <- file_characteristics %>% mutate(n_cases=cases, n_controls=controls)
+
+sample_size_per_country <- sample_size_per_survey %>% group_by(country, sex) %>% summarize(n_case=sum(n_cases), n_control=sum(n_controls))
+
+write_csv(sample_size_per_country, file="./summary_stats/sample_size_auc.csv")
+
+```
+
+
 ```{r fig.width=6, fig.height=5}
 p1 <- ggplot(gini_per_country, aes(country, gini_coef, color=sex))
 p1 <- p1 + geom_bar(stat='identity', position='dodge') + coord_flip() + ylab('Gini Coef. of Predicted Probability') 
-p1 <- p1 + theme(legend.position="none")
+p1 <- p1# + theme(legend.position="none")
 p1
 ```
 
@@ -58,7 +76,7 @@ library(ggrepel)
 gini_per_country <- gini_per_country %>% mutate(plot_label = paste(country, " (", sex, ")", sep=""))
 p2 <- ggplot(gini_per_country, aes(prevalence,  gini_coef, color=sex, label=plot_label))
 p2 <- p2 + geom_point(stat='identity', position='dodge') + xlab('HIV+ Prevalence') + ylab("Gini Coef. of Predicted Probability")
-p2 <- p2 + geom_text_repel(size=3) + theme(legend.position="none")
+p2 <- p2 + geom_text_repel(size=3) #+ theme(legend.position="none")
 p2
 ```
 
