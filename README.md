@@ -1,6 +1,6 @@
 # The Demographic, Social, and Economic Correlates of HIV Infection Status Common Across Sub-Saharan Countries
 
-*submitted for review, 2020*
+*submitted for review, 2022*
 
 ## Authors 
 - Chirag J Patel
@@ -27,11 +27,7 @@
 
 
 ## Getting Started
-- This github repository contains data processing and analysis code to execute 'X-wide association' in DHS data; please contact us or more information.
-- https://github.com/ekhco/dhs_hiv
-- https://github.com/donasaur/dhs-processing
-- https://github.com/donasaur/hiv-aws 
-- https://github.com/chiragjp/dhs_hiv_meta
+- This github repository contains data processing and analysis code to execute 'X-wide association' in DHS data; please contact us or more information
 
 ## Browsable online data:
 - A browsable synposis of our findings can be found here: <a href='https://www.chiragjpgroup.org/dhs_hiv_meta/'>chiragjpgroup.org/dhs_hiv_meta/</a> 
